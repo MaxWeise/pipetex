@@ -1,0 +1,67 @@
+\section{Requirements Engineering}
+The following will contain a list of concrete requirements for the project.
+The list is not final for the moment as future updates and development
+processes may impact the requirements of the project.
+
+The section \ref{sec:use cases} will contain a list of use cases which are the
+base for all requirements. The requirements themselves will be listed in
+section \ref{sec:requirements}.
+
+\subsection{Use Cases}\label{sec:use cases}
+The following contains a list of use cases for the system. 
+
+All use cases result in the construction of a PDF-Document which contains full
+images and is free from length marks.
+
+\subsubsection*{Removing the draft-option}
+The user calls the pipetex-application by entering the CLI-command for the
+application and supplying the name of the main {\LaTeX} file.  This is done in
+the directory containing the {\LaTeX} file.
+
+The application will make a copy or the file, remove draft option from the
+class definition and compile the {\LaTeX} file two times. The compiled pdf file
+will be moved to a separate directory and all generated auxiliary files will be
+removed from the directory.
+
+\subsubsection*{Creating a bibliography}
+The user calls the pipetex-application by entering the CLI-command for the
+application and supplying the name of the main {\LaTeX} file and a flag which
+specifies the creation of a bibliography file.  This is done in the directory
+containing the {\LaTeX} file.
+
+The application will make a copy or the file, remove draft option from the
+class definition and compile the {\LaTeX} file. The application will call a
+bibliography engine on the {\LaTeX} file and then compile the file again. The
+compiled pdf file will be moved to a separate directory and all generated
+auxiliary files will be removed from the directory.
+
+\subsubsection*{Creating a glossary}
+The user calls the pipetex-application by entering the CLI-command for the
+application and supplying the name of the main {\LaTeX} file and a flag which
+specifies the creation of a glossary file.  This is done in the directory
+containing the {\LaTeX} file.
+
+The application will make a copy or the file, remove draft option from the
+class definition and compile the {\LaTeX} file. The application will call a
+glossary engine on the {\LaTeX} file and then compile the file again. The
+compiled pdf file will be moved to a separate directory and all generated
+auxiliary files will be removed from the directory.
+
+\subsection{Requirements}\label{sec:requirements}
+Now following is a compilation of all requirements for the application.  The
+requirements will be grouped into three categories.  The categories are ordered
+by importance:
+
+\begin{itemize}
+    \item Must Have Requirements
+    \item Should Have Requirements
+    \item Nice To Have Requirements
+\end{itemize}
+
+The requirements have an ID, a name and a short description.
+
+% TODO: Add table containing MH Requirements, SH Requirements and NtH Requirements
+
+\subsubsection{Must Have Requirements}\label{sec:must_have_requirements}
+\subsubsection{Should Have Requirements}\label{sec:should_have_requirements}
+\subsubsection{Nice To Have Requirements}\label{sec:nice_to_have_requirements}
