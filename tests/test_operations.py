@@ -23,7 +23,11 @@ def testfile_tex():
     test_file_name = "test_file"
     shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
     yield test_file_name
+
     remove_files(test_file_name)
+    # remove texput.log specifically
+    os.remove("texput.log")
+
 
 
 # @pytest.fixture
@@ -66,6 +70,6 @@ def test_compile_latex_file(testfile_tex, config_dict):
 def test_compile_latex_file_fileNotFound(config_dict):
     """Tests the compilation of latex files. """
     # run test function
-    with pytest.raises(Exception):
+    with pytest.raises(FileNotFoundError):
         underTest = operations.compile_latex_file("not_a_file", config_dict)
 
