@@ -8,6 +8,8 @@ signature so the pipeline can dynamically execute them one by one.
 created: 23.07.2022
 """
 
+import os
+import subprocess
 from typing import Any
 
 
@@ -46,7 +48,23 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Any:
         config_dict: Dictionary containing further settings to run the engine.
 
     """
-    ...
+
+    if not f"{file_name}.tex" in os.listdir():
+        raise FileNotFoundError(
+                f"The file {file_name}.tex is not found in the current "
+                "working directory"
+        )
+
+    argument_list: list[str] = ["pdflatex", "-quiet", f"{file_name}.tex"]
+
+    # TODO: Remove quiet option if specified in config_dict
+
+    try:
+        subprocess.call(argument_list)
+    except Exception as e:
+        # TODO: Logg exception
+        print(e)
+
 
 
 def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
