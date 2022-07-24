@@ -1,0 +1,14 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    docs/
+    __init__.py
+ignore = 
+    #W391: Blank lines at end of file
+    W391,
+    # E402: module level import not at top of line
+    E402,
+    W504,
+max-complexity = 9 
+max-line-length = 80
