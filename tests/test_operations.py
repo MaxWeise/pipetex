@@ -31,6 +31,17 @@ def testfile_tex():
 
 
 
+@pytest.fixture
+def testfile_tex_no_draft_option():
+    test_file_name = "test_file_no_draft"
+    shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
+    yield test_file_name
+
+    remove_files(test_file_name)
+    # remove texput.log specifically
+    file_list = os.listdir()
+
+
 # @pytest.fixture
 # def testfile_glo():
 #     test_file_name = "test_file_glo"
@@ -69,8 +80,38 @@ def test_compile_latex_file(testfile_tex, config_dict):
 
 
 def test_compile_latex_file_fileNotFound(config_dict):
-    """Tests the compilation of latex files. """
+    """Tests that the compilation function raises an appropriate error. """
     # run test function
     with pytest.raises(FileNotFoundError):
         underTest = operations.compile_latex_file("not_a_file", config_dict)
+
+
+def test_remove_draft_option(testfile_tex, config_dict):
+    """Tests that the draft option from the classdefinition gets removed. """
+    file_name = testfile_tex
+
+    # run test function
+    underTest = operations.remove_draft_option(file_name, config_dict)
+
+    with open(f"{file_name}.tex", "r") as f:
+        lines_in_testfile: list[str] = [line.rstrip() for line in f]
+
+    # assert conditions
+    assert "draft" not in lines_in_testfile[0]
+    assert len(lines_in_testfile) == 4
+
+
+def test_remove_draft_option_fileNotFound(config_dict):
+    """Tests that the draft option from the classdefinition gets removed. """
+    # run test function
+    with pytest.raises(FileNotFoundError):
+        underTest = operations.remove_draft_option("not_a_file", config_dict)
+
+
+def test_remove_draft_option_draftOptionNotFound(
+        testfile_tex_no_draft_option, config_dict):
+    """Tests that the draft option from the classdefinition gets removed. """
+    # run test function
+    with pytest.raises(Exception):
+        underTest = operations.remove_draft_option("not_a_file", config_dict)
 
