@@ -9,6 +9,7 @@ created: 23.07.2022
 """
 
 import os
+import re
 import subprocess
 from typing import Any
 
@@ -31,7 +32,35 @@ def remove_draft_option(file_name: str, config_dict: dict[str, Any]) -> Any:
         config_dict: Dictionary containing further settings to run the engine.
 
     """
-    ...
+
+    if f"{file_name}.tex" not in os.listdir():
+        raise FileNotFoundError(
+            f"The file {file_name}.tex is not found in the current "
+            "working directory"
+        )
+
+    with open(f"{file_name}.tex", "r", encoding="utf-8") as read_file:
+        lines_of_file: list[str] = [line for line in read_file]
+
+    class_line = lines_of_file[0]
+
+    options_list = re.findall(r"\[(.+?)\]", class_line)[0].split(",")
+    doc_class = re.findall(r"\{(.+?)\}", class_line)
+
+    try:
+        options_list.pop(options_list.index(" draft"))
+    except ValueError:
+        # TODO: Implement correct erorr handling
+        # For now, the error is just re-raised
+        raise ValueError
+
+    options_string = "[" + ",".join(options_list) + "]"
+    doc_class = "{" + doc_class[0] + "}"
+
+    lines_of_file[0] = f"\\documentclass{options_string}{doc_class}"
+
+    with open(f"{file_name}.tex", "w", encoding="utf-8") as write_file:
+        write_file.writelines(lines_of_file)
 
 
 # === Compilation / Creation of aux files / Generating LaTeX artifacts ===
