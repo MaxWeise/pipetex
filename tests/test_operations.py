@@ -40,6 +40,27 @@ def testfile_tex_no_draft_option():
 
 
 @pytest.fixture
+def testfile_bib():
+    test_file_name = "test_file_bib"
+    shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
+    shutil.copy(f"./test_assets/{test_file_name}.bib", ".")
+    shutil.copy(f"./test_assets/{test_file_name}.bcf", ".")
+    yield test_file_name
+
+    remove_files(test_file_name)
+
+
+@pytest.fixture
+def testfile_bib_no_bcf():
+    test_file_name = "test_file_bib"
+    shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
+    shutil.copy(f"./test_assets/{test_file_name}.bib", ".")
+    yield test_file_name
+
+    remove_files(test_file_name)
+
+
+@pytest.fixture
 def config_dict():
     return {}
 
@@ -107,4 +128,18 @@ def test_remove_draft_option_draftOptionNotFound(testfile_tex_no_draft_option,
         lines_after_runing_test: list[str] = [line.rstrip() for line in f]
 
     assert lines_after_runing_test == lines_befor_runing_test
+
+
+def test_create_bibliography(testfile_bib, config_dict):
+    """ Tests the creation of a bibliography. """
+    file_name = testfile_bib
+
+    underTest = operations.create_bibliograpyh(file_name, config_dict)
+
+    assert f"{file_name}.bbl" in os.listdir()
+
+
+def test_create_bibliography_BcfFileNotFound(testfile_bib_no_bcf, config_dict):
+    """ Tests the failure behaviour for the operation. """
+    ...
 
