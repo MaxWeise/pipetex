@@ -49,10 +49,10 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Any:
 
     """
 
-    if not f"{file_name}.tex" in os.listdir():
+    if f"{file_name}.tex" not in os.listdir():
         raise FileNotFoundError(
-                f"The file {file_name}.tex is not found in the current "
-                "working directory"
+            f"The file {file_name}.tex is not found in the current "
+            "working directory"
         )
 
     argument_list: list[str] = ["pdflatex", "-quiet", f"{file_name}.tex"]
@@ -64,7 +64,6 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Any:
     except Exception as e:
         # TODO: Logg exception
         print(e)
-
 
 
 def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
