@@ -15,7 +15,6 @@ from tests.test_helpers.util_functions import remove_files
 import os
 import pytest
 import shutil
-from typing import Any
 
 
 @pytest.fixture
@@ -30,7 +29,6 @@ def testfile_tex():
     os.remove("texput.log") if "texput.log" in file_list else ...
 
 
-
 @pytest.fixture
 def testfile_tex_no_draft_option():
     test_file_name = "test_file_no_draft"
@@ -38,8 +36,6 @@ def testfile_tex_no_draft_option():
     yield test_file_name
 
     remove_files(test_file_name)
-    # remove texput.log specifically
-    file_list = os.listdir()
 
 
 # @pytest.fixture
@@ -70,11 +66,11 @@ def test_compile_latex_file(testfile_tex, config_dict):
     file_name = testfile_tex
 
     # run test function
-    underTest = operations.compile_latex_file(file_name, config_dict)
+    underTest = operations.compile_latex_file(file_name, config_dict)   # noqa: F841, E501
 
     # assert statements
     assert f"{file_name}.pdf" in os.listdir("."), (
-            f"The file {file_name}.pdf does not exist"
+        f"The file {file_name}.pdf does not exist"
     )
     assert os.stat(f"{file_name}.pdf").st_size > 0
 
@@ -83,7 +79,7 @@ def test_compile_latex_file_fileNotFound(config_dict):
     """Tests that the compilation function raises an appropriate error. """
     # run test function
     with pytest.raises(FileNotFoundError):
-        underTest = operations.compile_latex_file("not_a_file", config_dict)
+        underTest = operations.compile_latex_file("not_a_file", config_dict)    # noqa: F841, E501
 
 
 def test_remove_draft_option(testfile_tex, config_dict):
@@ -91,7 +87,7 @@ def test_remove_draft_option(testfile_tex, config_dict):
     file_name = testfile_tex
 
     # run test function
-    underTest = operations.remove_draft_option(file_name, config_dict)
+    underTest = operations.remove_draft_option(file_name, config_dict)  # noqa: F841, E501
 
     with open(f"{file_name}.tex", "r") as f:
         lines_in_testfile: list[str] = [line.rstrip() for line in f]
@@ -105,13 +101,26 @@ def test_remove_draft_option_fileNotFound(config_dict):
     """Tests that the draft option from the classdefinition gets removed. """
     # run test function
     with pytest.raises(FileNotFoundError):
-        underTest = operations.remove_draft_option("not_a_file", config_dict)
+        underTest = operations.remove_draft_option("not_a_file", config_dict)   # noqa: F841, E501
 
 
-def test_remove_draft_option_draftOptionNotFound(
-        testfile_tex_no_draft_option, config_dict):
+def test_remove_draft_option_draftOptionNotFound(testfile_tex_no_draft_option,
+                                                 config_dict):
     """Tests that the draft option from the classdefinition gets removed. """
+    file_name = testfile_tex_no_draft_option
+    # Collect lines in file
+    with open(f"{file_name}.tex", "r") as f:
+        lines_befor_runing_test: list[str] = [line.rstrip() for line in f]
+
     # run test function
-    with pytest.raises(Exception):
-        underTest = operations.remove_draft_option("not_a_file", config_dict)
+    with pytest.raises(ValueError):
+        underTest = operations.remove_draft_option(
+                testfile_tex_no_draft_option,
+                config_dict
+        )   # noqa: F841
+
+    with open(f"{file_name}.tex", "r") as f:
+        lines_after_runing_test: list[str] = [line.rstrip() for line in f]
+
+    assert lines_after_runing_test == lines_befor_runing_test
 

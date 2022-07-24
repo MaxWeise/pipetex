@@ -8,7 +8,6 @@ created 23.07.2022
 """
 
 import os
-import shutil
 
 
 def remove_files(file_name: str):
