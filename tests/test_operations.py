@@ -26,7 +26,8 @@ def testfile_tex():
 
     remove_files(test_file_name)
     # remove texput.log specifically
-    os.remove("texput.log")
+    file_list = os.listdir()
+    os.remove("texput.log") if "texput.log" in file_list else ...
 
 
 
