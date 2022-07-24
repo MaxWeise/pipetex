@@ -23,10 +23,11 @@ def testfile_tex():
     shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
     yield test_file_name
 
-    remove_files(test_file_name)
     # remove texput.log specifically
     file_list = os.listdir()
     os.remove("texput.log") if "texput.log" in file_list else ...
+
+    remove_files(test_file_name)
 
 
 @pytest.fixture
@@ -36,23 +37,6 @@ def testfile_tex_no_draft_option():
     yield test_file_name
 
     remove_files(test_file_name)
-
-
-# @pytest.fixture
-# def testfile_glo():
-#     test_file_name = "test_file_glo"
-#     shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
-#     yield test_file_name
-#     remove_files(test_file_name)
-
-
-# @pytest.fixture
-# def testfile_bib():
-#     test_file_name = "test_file_bib"
-#     shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
-#     shutil.copy(f"./test_assets/{test_file_name}.bib", ".")
-#     yield test_file_name
-#     remove_files(test_file_name)
 
 
 @pytest.fixture
@@ -114,10 +98,10 @@ def test_remove_draft_option_draftOptionNotFound(testfile_tex_no_draft_option,
 
     # run test function
     with pytest.raises(ValueError):
-        underTest = operations.remove_draft_option(
-                testfile_tex_no_draft_option,
-                config_dict
-        )   # noqa: F841
+        underTest = operations.remove_draft_option(   # noqa: F841
+            testfile_tex_no_draft_option,
+            config_dict
+        )
 
     with open(f"{file_name}.tex", "r") as f:
         lines_after_runing_test: list[str] = [line.rstrip() for line in f]
