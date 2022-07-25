@@ -134,12 +134,18 @@ def test_create_bibliography(testfile_bib, config_dict):
     """ Tests the creation of a bibliography. """
     file_name = testfile_bib
 
-    underTest = operations.create_bibliograpyh(file_name, config_dict)
+    underTest = operations.create_bibliograpyh(file_name, config_dict)  # noqa: F841, E501
 
-    assert f"{file_name}.bbl" in os.listdir()
+    files_in_dir = os.listdir()
+    assert f"{file_name}.bbl" in files_in_dir
 
 
 def test_create_bibliography_BcfFileNotFound(testfile_bib_no_bcf, config_dict):
     """ Tests the failure behaviour for the operation. """
-    ...
+    with pytest.raises(FileNotFoundError):
+        underTest = operations.create_bibliograpyh(     # noqa: F841
+            testfile_bib_no_bcf,
+            config_dict
+        )
+
 

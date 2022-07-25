@@ -109,7 +109,21 @@ def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
         config_dict: Dictionary containing further settings to run the engine.
 
     """
-    ...
+    if f"{file_name}.bcf" not in os.listdir():
+        raise FileNotFoundError(
+            f"The file {file_name}.bcf has not been created. "
+            "Bibliography can not be created."
+        )
+
+    argument_list: list[str] = ["biber", "-q", f"{file_name}"]
+
+    # TODO: Remove quiet option if specified in config_dict
+
+    try:
+        subprocess.call(argument_list)
+    except Exception as e:
+        # TODO: Logg except
+        print(e)
 
 
 def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
