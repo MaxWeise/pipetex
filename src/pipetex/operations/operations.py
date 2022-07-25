@@ -140,7 +140,33 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
         config_dict: Dictionary containing further settings to run the engine.
 
     """
-    ...
+    if f"{file_name}.glo" not in os.listdir():
+        raise FileNotFoundError(
+            f"The file {file_name}.glo has not been created. "
+            "Glossary can not be created."
+        )
+
+    if f"{file_name}.ist" not in os.listdir():
+        raise FileNotFoundError(
+            f"The file {file_name}.ist has not been created. "
+            "Glossary can not be created."
+        )
+
+    if f"{file_name}.aux" not in os.listdir():
+        raise FileNotFoundError(
+            f"The file {file_name}.aux has not been created. "
+            "Glossary can not be created."
+        )
+
+    argument_list: list[str] = ["makeglossaries", "-q", f"{file_name}"]
+
+    # TODO: Remove quiet option if specified in config_dict
+
+    try:
+        subprocess.call(argument_list)
+    except Exception as e:
+        # TODO: Logg except
+        print(e)
 
 
 # === tear down / clean up processes ===

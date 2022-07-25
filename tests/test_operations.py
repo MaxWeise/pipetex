@@ -20,7 +20,7 @@ import shutil
 @pytest.fixture
 def testfile_tex():
     test_file_name = "test_file"
-    shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
+    shutil.copy(f"./test_assets/tex_assets/{test_file_name}.tex", ".")
     yield test_file_name
 
     # remove texput.log specifically
@@ -33,7 +33,7 @@ def testfile_tex():
 @pytest.fixture
 def testfile_tex_no_draft_option():
     test_file_name = "test_file_no_draft"
-    shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
+    shutil.copy(f"./test_assets/tex_assets/{test_file_name}.tex", ".")
     yield test_file_name
 
     remove_files(test_file_name)
@@ -42,9 +42,9 @@ def testfile_tex_no_draft_option():
 @pytest.fixture
 def testfile_bib():
     test_file_name = "test_file_bib"
-    shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
-    shutil.copy(f"./test_assets/{test_file_name}.bib", ".")
-    shutil.copy(f"./test_assets/{test_file_name}.bcf", ".")
+    shutil.copy(f"./test_assets/bib_assets/{test_file_name}.tex", ".")
+    shutil.copy(f"./test_assets/bib_assets/{test_file_name}.bib", ".")
+    shutil.copy(f"./test_assets/bib_assets/{test_file_name}.bcf", ".")
     yield test_file_name
 
     remove_files(test_file_name)
@@ -53,8 +53,29 @@ def testfile_bib():
 @pytest.fixture
 def testfile_bib_no_bcf():
     test_file_name = "test_file_bib"
-    shutil.copy(f"./test_assets/{test_file_name}.tex", ".")
-    shutil.copy(f"./test_assets/{test_file_name}.bib", ".")
+    shutil.copy(f"./test_assets/bib_assets/{test_file_name}.tex", ".")
+    shutil.copy(f"./test_assets/bib_assets/{test_file_name}.bib", ".")
+    yield test_file_name
+
+    remove_files(test_file_name)
+
+
+@pytest.fixture
+def testfile_glo():
+    test_file_name = "test_file_glo"
+    shutil.copy(f"./test_assets/glo_assets/{test_file_name}.tex", ".")
+    shutil.copy(f"./test_assets/glo_assets/{test_file_name}.ist", ".")
+    shutil.copy(f"./test_assets/glo_assets/{test_file_name}.glo", ".")
+    shutil.copy(f"./test_assets/glo_assets/{test_file_name}.aux", ".")
+    yield test_file_name
+
+    remove_files(test_file_name)
+
+
+@pytest.fixture
+def testfile_glo_no_aux_files():
+    test_file_name = "test_file_glo"
+    shutil.copy(f"./test_assets/glo_assets/{test_file_name}.tex", ".")
     yield test_file_name
 
     remove_files(test_file_name)
@@ -136,8 +157,7 @@ def test_create_bibliography(testfile_bib, config_dict):
 
     underTest = operations.create_bibliograpyh(file_name, config_dict)  # noqa: F841, E501
 
-    files_in_dir = os.listdir()
-    assert f"{file_name}.bbl" in files_in_dir
+    assert f"{file_name}.bbl" in os.listdir()
 
 
 def test_create_bibliography_BcfFileNotFound(testfile_bib_no_bcf, config_dict):
@@ -145,6 +165,48 @@ def test_create_bibliography_BcfFileNotFound(testfile_bib_no_bcf, config_dict):
     with pytest.raises(FileNotFoundError):
         underTest = operations.create_bibliograpyh(     # noqa: F841
             testfile_bib_no_bcf,
+            config_dict
+        )
+
+
+def test_create_glossaries(testfile_glo, config_dict):
+    """Tests the creation of glossaries. """
+    file_name = testfile_glo
+
+    underTest = operations.create_glossary(file_name, config_dict)
+
+    assert f"{file_name}.gls" in os.listdir()
+
+
+def test_create_glossaries_AuxFileNotFoundError(testfile_glo, config_dict):
+    """Tests if an error is raised when .aux file is missing. """
+    file_name = testfile_glo
+    with pytest.raises(FileNotFoundError):
+        os.remove(f"{file_name}.aux")
+        underTest = operations.create_glossary(
+            testfile_glo,
+            config_dict
+        )
+
+
+def test_create_glossaries_GloFileNotFoundError(testfile_glo, config_dict):
+    """Tests if an error is raised when .glo file is missing. """
+    file_name = testfile_glo
+    with pytest.raises(FileNotFoundError):
+        os.remove(f"{file_name}.glo")
+        underTest = operations.create_glossary(
+            testfile_glo,
+            config_dict
+        )
+
+
+def test_create_glossaries_IstFileNotFoundError(testfile_glo, config_dict):
+    """Tests if an error is raised when .ist file is missing. """
+    file_name = testfile_glo
+    with pytest.raises(FileNotFoundError):
+        os.remove(f"{file_name}.ist")
+        underTest = operations.create_glossary(
+            testfile_glo,
             config_dict
         )
 
