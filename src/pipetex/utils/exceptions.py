@@ -4,7 +4,7 @@
 created: 25.07.2022
 """
 
-from piptex.utils.enums import SeverityLevels
+from pipetex.utils.enums import SeverityLevels
 
 from typing import Optional
 
@@ -30,11 +30,14 @@ class InternalException(Exception):
             exception.
     """
 
+    # Public attributes
     message: str
-    severity_level: SeverityLevels
     error_tpye: Optional[Exception]
 
-    def __init__(self, message: SeverityLevels, severity_level: int,
+    # Private attributes
+    _severity_level: SeverityLevels
+
+    def __init__(self, message: str, severity_level: SeverityLevels,
                  error_tpye: Optional[Exception] = None):
         """Instantiates an InternalException object.
 
@@ -48,7 +51,17 @@ class InternalException(Exception):
         """
 
         self.message = message
-        self.severity_level = severity_level
+        self._severity_level = severity_level
         self.error_tpye = error_tpye
 
+    @property
+    def severity_level(self) -> int:
+        return self._severity_level.value
 
+    def __str__(self) -> str:
+        _errorType = ("InternalException" if not self.error_tpye
+                      else self.error_tpye)
+        return f"{_errorType} ({self.severity_level}) | {self.message}"
+
+    def __repr__(self) -> str:
+        return super().__repr__()
