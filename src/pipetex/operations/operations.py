@@ -35,9 +35,16 @@ def copy_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
             file extension.
         config_dict: Dictionary containing further settings to run the engine.
 
+    Returns:
+        Monad: Tuple which contains a boolean to indicate success of the
+            function. If its true, the second value will be None. If its
+            false, the second value will contain an InternalException object
+            containing further information.
+
     Raises:
-        InternalException: Indicates an internal error and is used to comunicate
-            exceptions and how to handle them back to the calling interface.
+        InternalException: Indicates an internal error and is used to
+            comunicate exceptions and how to handle them back to the calling
+            interface.
             [Please see class definition]
         Raised Levels: CRITICAL
     """
@@ -71,6 +78,12 @@ def remove_draft_option(file_name: str, config_dict: dict[str, Any]) -> Monad:
         file_name: The name of the file to be compiled. Does not contain any
             file extension.
         config_dict: Dictionary containing further settings to run the engine.
+
+    Returns:
+        Monad: Tuple which contains a boolean to indicate success of the
+            function. If its true, the second value will be None. If its
+            false, the second value will contain an InternalException object
+            containing further information.
 
     Raises:
         InternalException: Indicates an internal error and is used to comunicate
@@ -131,6 +144,12 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
             file extension.
         config_dict: Dictionary containing further settings to run the engine.
 
+    Returns:
+        Monad: Tuple which contains a boolean to indicate success of the
+            function. If its true, the second value will be None. If its
+            false, the second value will contain an InternalException object
+            containing further information.
+
     Raises:
         InternalException: Indicates an internal error and is used to comunicate
             exceptions and how to handle them back to the calling interface.
@@ -167,6 +186,12 @@ def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
             file extension.
         config_dict: Dictionary containing further settings to run the engine.
 
+    Returns:
+        Monad: Tuple which contains a boolean to indicate success of the
+            function. If its true, the second value will be None. If its
+            false, the second value will contain an InternalException object
+            containing further information.
+
     Raises:
         InternalException: Indicates an internal error and is used to comunicate
             exceptions and how to handle them back to the calling interface.
@@ -201,6 +226,12 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
         file_name: The name of the file to be compiled. Does not contain any
             file extension.
         config_dict: Dictionary containing further settings to run the engine.
+
+    Returns:
+        Monad: Tuple which contains a boolean to indicate success of the
+            function. If its true, the second value will be None. If its
+            false, the second value will contain an InternalException object
+            containing further information.
 
     Raises:
         InternalException: Indicates an internal error and is used to comunicate
@@ -244,7 +275,7 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
 
 # === tear down / clean up processes ===
 
-def clean_working_dir(file_name: str, config_dict: dict[str, Any]) -> Any:
+def clean_working_dir(file_name: str, config_dict: dict[str, Any]) -> Monad:
     """Cleans the working directory from any generated files.
 
     Removes unwanted / redundant auxiliary files. Moves the created PDF
@@ -255,6 +286,13 @@ def clean_working_dir(file_name: str, config_dict: dict[str, Any]) -> Any:
             file extension.
         config_dict: Dictionary containing further settings to run the engine.
 
+    Returns:
+        Monad: Tuple which contains a boolean to indicate success of the
+            function. If its true, the second value will be None. If its
+            false, the second value will contain an InternalException object
+            containing further information.
+
     """
-    ...
+
+    return True, None
 
