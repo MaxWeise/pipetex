@@ -16,7 +16,7 @@ class SeverityLevels(enum.IntEnum):
     CRITICAL = 30
 
 
-class ConfigDictKeys(enum.Enum)
+class ConfigDictKeys(enum.Enum):
     """This enum holds all allowed keys for the shared config dictionary.
 
     General Rules:
@@ -25,3 +25,5 @@ class ConfigDictKeys(enum.Enum)
     """
 
     NEW_NAME = "new_name"
+    FILE_PREFIX = "file_prefix"
+
