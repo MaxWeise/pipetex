@@ -12,6 +12,7 @@ from pipetex.utils import exceptions, enums
 
 import os
 import re
+import shutil
 import subprocess
 from typing import Any, Optional, Tuple
 
@@ -20,6 +21,42 @@ from typing import Any, Optional, Tuple
 Monad = Tuple[bool, Optional[exceptions.InternalException]]
 
 # === Preparation of file / working dir ===
+def copy_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
+    """Create a working copy of the specified latex file.
+
+    To avoid losing data or corrupting the latex file a copy is created. The
+    copy can be identified by a prefix added in this function. The new file
+    name is written in the config dict. It is the responsibility of the
+    dict owner to update the name of the working file accordingly.
+
+    Args:
+        file_name: The name of the file to be compiled. Does not contain any
+            file extension.
+        config_dict: Dictionary containing further settings to run the engine.
+
+    Raises:
+        InternalException: Indicates an internal error and is used to comunicate
+            exceptions and how to handle them back to the calling interface.
+            [Please see class definition]
+        Raised Levels: CRITICAL
+    """
+
+    if f"{file_name}.tex" not in os.listdir():
+        ex = exceptions.InternalException(
+                f"The file {file_name}.tex is not in the directory.",
+                enums.SeverityLevels.CRITICAL
+        )
+
+        return False, ex
+
+    file_prefix: str = config_dict[enums.ConfigDictKeys.FILE_PREFIX.value]
+    new_name: str = f"{file_prefix}_{file_name}"
+    shutil.copy(f'{file_name}.tex', f'{new_name}.tex')
+
+    config_dict[enums.ConfigDictKeys.NEW_NAME.value] = new_name
+
+    return True, None
+
 
 def remove_draft_option(file_name: str, config_dict: dict[str, Any]) -> Monad:
     """Removes the draft option from a tex file.
@@ -78,6 +115,7 @@ def remove_draft_option(file_name: str, config_dict: dict[str, Any]) -> Monad:
         write_file.writelines(lines_of_file)
 
     return True, None
+
 
 # === Compilation / Creation of aux files / Generating LaTeX artifacts ===
 
@@ -201,6 +239,7 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
     subprocess.call(argument_list)
 
     return True, None
+
 
 # === tear down / clean up processes ===
 
