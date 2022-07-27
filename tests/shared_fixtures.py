@@ -74,5 +74,5 @@ def testfile_glo_no_aux_files():
 
 @pytest.fixture
 def config_dict():
-    return {}
+    return {"file_prefix": "[piped]"}
 

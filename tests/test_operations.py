@@ -39,7 +39,7 @@ def test_remove_draft_option(testfile_tex, config_dict):
 
 def test_remove_draft_option_fileNotFound(config_dict):
     """Tests that the draft option from the classdefinition gets removed. """
-    underTest: Monad = operations.remove_draft_option(
+    underTest = operations.remove_draft_option(
         "not_a_file",
         config_dict
     )
@@ -69,5 +69,31 @@ def test_remove_draft_option_draftOptionNotFound(testfile_tex_no_draft_option,
     assert not underTest[0]
     assert type(underTest[1].severity_level) == int
     assert underTest[1].severity_level <= 10
+
+
+def test_copy_file(testfile_tex, config_dict):
+    """Tests that the working file is copied correctly."""
+    file_name = testfile_tex
+    new_file_name = f"[piped]_{file_name}"
+
+    underTest = operations.copy_latex_file(file_name, config_dict)
+    expectedNewName: str = config_dict[enums.ConfigDictKeys.NEW_NAME.value]
+
+    assert underTest[0]
+    assert not underTest[1]
+    assert f"{new_file_name}.tex" in os.listdir()
+    assert f"{new_file_name}" == expectedNewName
+    assert f"{file_name}.tex" in os.listdir()
+
+
+def test_copy_file_fileNotFound(testfile_tex, config_dict):
+    """Tests that the working file is copied correctly."""
+
+    # file_name = testfile_tex
+    underTest = operations.copy_latex_file("Not a testfile", config_dict)
+
+    assert not underTest[0]
+    assert type(underTest[1].severity_level) == int
+    assert 20 < underTest[1].severity_level <= 30
 
 
