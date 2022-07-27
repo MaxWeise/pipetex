@@ -8,7 +8,8 @@ signature so the pipeline can dynamically execute them one by one.
 created: 23.07.2022
 """
 
-from pipetex.utils import exceptions, enums
+from pipetex.utils import exceptions
+from pipetex.utils.enums import SeverityLevels, ConfigDictKeys
 
 import os
 import re
@@ -17,7 +18,7 @@ import subprocess
 from typing import Any, Optional, Tuple
 
 
-# function signature: Callable[str, dict[str, Any]] -> Monad 
+# === Type Def ===
 Monad = Tuple[bool, Optional[exceptions.InternalException]]
 
 # === Preparation of file / working dir ===
@@ -44,16 +45,16 @@ def copy_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
     if f"{file_name}.tex" not in os.listdir():
         ex = exceptions.InternalException(
                 f"The file {file_name}.tex is not in the directory.",
-                enums.SeverityLevels.CRITICAL
+                SeverityLevels.CRITICAL
         )
 
         return False, ex
 
-    file_prefix: str = config_dict[enums.ConfigDictKeys.FILE_PREFIX.value]
+    file_prefix: str = config_dict[ConfigDictKeys.FILE_PREFIX.value]
     new_name: str = f"{file_prefix}_{file_name}"
     shutil.copy(f'{file_name}.tex', f'{new_name}.tex')
 
-    config_dict[enums.ConfigDictKeys.NEW_NAME.value] = new_name
+    config_dict[ConfigDictKeys.NEW_NAME.value] = new_name
 
     return True, None
 
@@ -82,7 +83,7 @@ def remove_draft_option(file_name: str, config_dict: dict[str, Any]) -> Monad:
         ex = exceptions.InternalException(
             f"The file {file_name}.tex is not found in the current "
             "working directory",
-            enums.SeverityLevels.CRITICAL
+            SeverityLevels.CRITICAL
         )
 
         return False, ex
@@ -100,7 +101,7 @@ def remove_draft_option(file_name: str, config_dict: dict[str, Any]) -> Monad:
     except ValueError:
         ex = exceptions.InternalException(
             "Draft option is not in the class definition",
-            enums.SeverityLevels.LOW
+            SeverityLevels.LOW
             # type(ValueError)
         )
 
@@ -141,7 +142,7 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
         ex = exceptions.InternalException(
             f"The file {file_name}.tex is not found in the current "
             "working directory",
-            enums.SeverityLevels.CRITICAL
+            SeverityLevels.CRITICAL
         )
 
         return False, ex
@@ -176,7 +177,7 @@ def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
         ex = exceptions.InternalException(
             f"The file {file_name}.bcf has not been created. "
             "Bibliography can not be created.",
-            enums.SeverityLevels.HIGH
+            SeverityLevels.HIGH
         )
 
         return False, ex
@@ -211,7 +212,7 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
         ex = exceptions.InternalException(
             f"The file {file_name}.glo has not been created. "
             "Glossary can not be created.",
-            enums.SeverityLevels.HIGH
+            SeverityLevels.HIGH
         )
 
         return False, ex
@@ -220,7 +221,7 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
         ex = exceptions.InternalException(
             f"The file {file_name}.ist has not been created. "
             "Glossary can not be created.",
-            enums.SeverityLevels.HIGH
+            SeverityLevels.HIGH
         )
 
         return False, ex
@@ -229,7 +230,7 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
         ex = exceptions.InternalException(
             f"The file {file_name}.aux has not been created. "
             "Glossary can not be created.",
-            enums.SeverityLevels.HIGH
+            SeverityLevels.HIGH
         )
 
         return False, ex
