@@ -9,7 +9,6 @@ entirely clear right now.
 created 23.07.2022
 """
 
-from typing import Optional, Tuple
 from src.pipetex.operations import operations
 from src.pipetex.utils import enums, exceptions
 
@@ -17,6 +16,7 @@ from tests.shared_fixtures import testfile_tex, config_dict, testfile_tex_no_dra
 
 import os
 import pytest
+from typing import Optional, Tuple
 
 
 # === Type Def ===
