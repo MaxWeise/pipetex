@@ -12,6 +12,6 @@ class SeverityLevels(enum.IntEnum):
     """The levels of severity wich are used for exception handling."""
 
     LOW = 10
-    CRITICAL = 20
-    HIGH = 30
+    HIGH = 20
+    CRITICAL = 30
 
