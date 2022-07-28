@@ -12,10 +12,13 @@ created 23.07.2022
 from src.pipetex.operations import operations
 from src.pipetex.utils import enums, exceptions
 
-from tests.shared_fixtures import testfile_tex, config_dict, testfile_tex_no_draft_option   # noqa: E501
+from tests.shared_fixtures import testfile_tex
+from tests.shared_fixtures import config_dict
+from tests.shared_fixtures import testfile_tex_no_draft_option
+from tests.shared_fixtures import dirty_working_dir_files
+
 
 import os
-import pytest
 from typing import Optional, Tuple
 
 
@@ -96,4 +99,60 @@ def test_copy_file_fileNotFound(testfile_tex, config_dict):
     assert type(underTest[1].severity_level) == int
     assert 20 < underTest[1].severity_level <= 30
 
+
+def test_clean_working_dir(dirty_working_dir_files, config_dict):
+    """Tests that the working dir gets cleaned properly."""
+
+    test_file: str = dirty_working_dir_files
+
+    underTest = operations.clean_working_dir(test_file, config_dict)
+    current_dir = os.listdir()
+
+    assert underTest[0]
+    assert not underTest[1]
+
+    for ex in ['tex', 'aux', 'pdf', 'glo', 'bib']:
+        assert f"{test_file}.{ex}" not in current_dir
+    assert "DEPLOY" in current_dir
+    assert f"{test_file}.pdf" in os.listdir("./DEPLOY")
+
+
+def test_clean_working_dir_FolderAlreadyExists(dirty_working_dir_files,
+                                               config_dict):
+    """Tests that the function executes properly."""
+
+    underTest = operations.clean_working_dir(
+        dirty_working_dir_files,
+        config_dict
+    )
+
+    assert not underTest[0]
+    assert type(underTest[1].severity_level) == int
+    assert underTest[1].severity_level <= 10
+
+    for ex in file_extentions:
+        assert f"{test_file}.{ex}" not in current_dir
+    assert "DEPLOY" in current_dir
+    assert f"{test_file}.pdf" in os.listdir("./DEPLOY")
+    ...
+
+
+def test_clean_working_dir_PdfFileNotFound(dirty_working_dir_files,
+                                           config_dict):
+    """Tests that the correct error type is thrown."""
+    test_file = dirty_working_dir_files
+
+    os.remove(f"{test_file}.pdf")
+    underTest = operations.clean_working_dir(
+        dirty_working_dir_files,
+        config_dict
+    )
+
+    assert not underTest[0]
+
+    assert type(underTest[1].severity_level) == int
+    assert 10 < underTest[1].severity_level <= 20
+
+    for ex in ['tex', 'aux', 'pdf', 'glo', 'bib']:
+        assert f"{test_file}.{ex}" not in current_dir
 

@@ -73,6 +73,20 @@ def testfile_glo_no_aux_files():
 
 
 @pytest.fixture
+def dirty_working_dir_files():
+    """Creates a working directory filled with redundant aux files."""
+    test_file_name = "test_file_glo"
+    file_extentions: list[str] = ['tex', 'aux', 'pdf', 'glo', 'bib']
+    for ex in file_extentions:
+        with open(f"{test_file_name}.{ex}", 'x') as f:
+            pass    # Empty file is sufficient
+
+    yield test_file_name
+
+    util_functions.remove_files(test_file_name)
+
+
+@pytest.fixture
 def config_dict():
     return {"file_prefix": "[piped]"}
 
