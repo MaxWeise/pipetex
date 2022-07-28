@@ -274,6 +274,54 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
 
 
 # === tear down / clean up processes ===
+def _move_pdf_file(file_name) -> Monad:
+    """Moves pdf file to seperate folder.
+
+    To avoid that the created pdf file is deleted by the clean up process, this
+    function creates a dedicated folder and moves the pdf file there.
+
+    Args:
+        file_name: The name of the file to be compiled. Does not contain any
+            file extension.
+
+    Returns:
+        Monad: Tuple which contains a boolean to indicate success of the
+            function. If its true, the second value will be None. If its
+            false, the second value will contain an InternalException object
+            containing further information.
+
+    Raises:
+        InternalException: Indicates an internal error and is used to comunicate
+            exceptions and how to handle them back to the calling interface.
+            [Please see class definition]
+        Raised Levels: HIGH
+    """
+    _exeption = None
+    _successvalue = True
+
+    # Create Folder
+    try:
+        os.makedirs("DEPLOY")
+    except FileExistsError as e:
+        _exeption = exceptions.InternalException(
+            "Folder already exists. Proceed as intended.",
+            SeverityLevels.LOW
+        )
+
+        _successvalue = False
+
+    try:
+        shutil.move(f"{file_name}.pdf", "./DEPLOY")
+    except FileNotFoundError:
+        _exeption = exceptions.InternalException(
+            "The pdf document could not be found. Perhaps it was not created?",
+            SeverityLevels.CRITICAL
+        )
+
+        _successvalue = False
+
+    return _successvalue, _exeption
+
 
 def clean_working_dir(file_name: str, config_dict: dict[str, Any]) -> Monad:
     """Cleans the working directory from any generated files.
@@ -293,6 +341,17 @@ def clean_working_dir(file_name: str, config_dict: dict[str, Any]) -> Monad:
             containing further information.
 
     """
+    _success: bool = True
+    _exception: Optional[exceptions.InternalException] = None
 
-    return True, None
+    _success, _exception = _move_pdf_file(file_name)
+
+    if not _success and _exception.severity_level >= 20:
+        return False, _exception
+
+    for file in os.listdir():
+        if config_dict[ConfigDictKeys.FILE_PREFIX.value] in file:
+            os.remove(file)
+
+    return _success, _exception
 
