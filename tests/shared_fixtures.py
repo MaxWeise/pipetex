@@ -8,6 +8,11 @@ import pytest
 import shutil
 
 
+# This constant is allowed. It is needed to prevent fixing tests over and over
+# agian and to save me some headaches.
+FILE_PREFIX: str = "[piped]"
+
+
 @pytest.fixture
 def testfile_tex():
     test_file_name = "test_file"
@@ -74,19 +79,40 @@ def testfile_glo_no_aux_files():
 
 @pytest.fixture
 def dirty_working_dir_files():
-    """Creates a working directory filled with redundant aux files."""
-    test_file_name = "test_file_glo"
-    file_extentions: list[str] = ['tex', 'aux', 'pdf', 'glo', 'bib']
-    for ex in file_extentions:
+    """Creates a working directory filled with redundant aux files.
+
+    Removes DEPLOY folder created by the function.
+    """
+    test_file_name = f"{FILE_PREFIX}_test_file"
+    for ex in ['tex', 'aux', 'pdf', 'glo', 'bib']:
         with open(f"{test_file_name}.{ex}", 'x') as f:
             pass    # Empty file is sufficient
 
     yield test_file_name
 
     util_functions.remove_files(test_file_name)
+    shutil.rmtree("./DEPLOY")
+
+
+@pytest.fixture
+def dirty_working_dir_files_deploy():
+    """Creates a working directory filled with redundant aux files.
+
+    Removes DEPLOY folder created by the function.
+    """
+    test_file_name = f"{FILE_PREFIX}_test_file"
+    os.makedirs("DEPLOY")
+    for ex in ['tex', 'aux', 'pdf', 'glo', 'bib']:
+        with open(f"{test_file_name}.{ex}", 'x') as f:
+            pass    # Empty file is sufficient
+
+    yield test_file_name
+
+    util_functions.remove_files(test_file_name)
+    shutil.rmtree("./DEPLOY")
 
 
 @pytest.fixture
 def config_dict():
-    return {"file_prefix": "[piped]"}
+    return {"file_prefix": FILE_PREFIX}
 

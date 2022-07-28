@@ -16,6 +16,7 @@ from tests.shared_fixtures import testfile_tex
 from tests.shared_fixtures import config_dict
 from tests.shared_fixtures import testfile_tex_no_draft_option
 from tests.shared_fixtures import dirty_working_dir_files
+from tests.shared_fixtures import dirty_working_dir_files_deploy
 
 
 import os
@@ -117,20 +118,22 @@ def test_clean_working_dir(dirty_working_dir_files, config_dict):
     assert f"{test_file}.pdf" in os.listdir("./DEPLOY")
 
 
-def test_clean_working_dir_FolderAlreadyExists(dirty_working_dir_files,
+def test_clean_working_dir_FolderAlreadyExists(dirty_working_dir_files_deploy,
                                                config_dict):
     """Tests that the function executes properly."""
 
+    test_file = dirty_working_dir_files_deploy
     underTest = operations.clean_working_dir(
-        dirty_working_dir_files,
+        dirty_working_dir_files_deploy,
         config_dict
     )
+    current_dir = os.listdir()
 
     assert not underTest[0]
     assert type(underTest[1].severity_level) == int
     assert underTest[1].severity_level <= 10
 
-    for ex in file_extentions:
+    for ex in ['tex', 'aux', 'pdf', 'glo', 'bib']:
         assert f"{test_file}.{ex}" not in current_dir
     assert "DEPLOY" in current_dir
     assert f"{test_file}.pdf" in os.listdir("./DEPLOY")
@@ -151,8 +154,5 @@ def test_clean_working_dir_PdfFileNotFound(dirty_working_dir_files,
     assert not underTest[0]
 
     assert type(underTest[1].severity_level) == int
-    assert 10 < underTest[1].severity_level <= 20
-
-    for ex in ['tex', 'aux', 'pdf', 'glo', 'bib']:
-        assert f"{test_file}.{ex}" not in current_dir
+    assert 20 < underTest[1].severity_level <= 30
 
