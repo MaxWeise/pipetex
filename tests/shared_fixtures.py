@@ -1,7 +1,5 @@
 """ Pytest fixtures used when testing functions."""
 
-# from tests.test_helpers.util_functions import remove_files
-from tests.test_helpers import util_functions
 
 import os
 import pytest
@@ -110,6 +108,22 @@ def dirty_working_dir_files_deploy():
 
     util_functions.remove_files(test_file_name)
     shutil.rmtree("./DEPLOY")
+
+
+@pytest.fixture
+def test_file_for_pipeline():
+    """Creates a compilable testfile inlcuding a bibliography to test."""
+    test_file_name = "test_file_bib"
+    shutil.copy(f"./test_assets/bib_assets/{test_file_name}.tex", ".")
+    shutil.copy(f"./test_assets/bib_assets/{test_file_name}.bib", ".")
+
+    yield test_file_name
+
+    util_functions.remove_files(test_file_name)
+    try:
+        shutil.rmtree("./DEPLOY")
+    except Exception as e:
+        print("Nothing to remove")
 
 
 @pytest.fixture

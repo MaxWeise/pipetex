@@ -10,6 +10,24 @@ created 23.07.2022
 import os
 
 
+def write_empty_file(file_name: str, file_extentions: str | list[str]):
+    """Creates files for testing.
+
+    Args:
+        file_name: Name of file(s) to be created.
+        file_extentions: .extention of file(s) to be created
+    """
+    if type(file_extentions) == list:
+        for ex in file_extentions:
+            with open(f"{file_name}.{ex}", "w+", encoding="utf-8"):
+                pass
+
+    else:
+        ex = file_extentions
+        with open(f"{file_name}.{ex}", "w+", encoding="utf-8"):
+            pass
+
+
 def remove_files(file_name: str):
     """ Removes files containing specified name.
 
