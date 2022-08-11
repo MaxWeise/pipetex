@@ -123,7 +123,7 @@ def remove_draft_option(file_name: str, config_dict: dict[str, Any]) -> Monad:
     options_string = "[" + ",".join(options_list) + "]"
     doc_class = "{" + doc_class[0] + "}"
 
-    lines_of_file[0] = f"\\documentclass{options_string}{doc_class}"
+    lines_of_file[0] = f"\\documentclass{options_string}{doc_class}\n"
 
     with open(f"{file_name}.tex", "w", encoding="utf-8") as write_file:
         write_file.writelines(lines_of_file)
@@ -132,7 +132,6 @@ def remove_draft_option(file_name: str, config_dict: dict[str, Any]) -> Monad:
 
 
 # === Compilation / Creation of aux files / Generating LaTeX artifacts ===
-
 def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
     """Compiles the file with to create a PDF file.
 
@@ -173,6 +172,16 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
     return True, None
 
 
+def _is_bibfile_present(list_of_current_files: list[str]) -> bool:
+    print(list_of_current_files)
+    file_types: list[str] = []
+    for f in list_of_current_files:
+        if "." in f:
+            parts = f.split(".")
+            file_types.append(parts[-1])
+
+    return "bib" in file_types
+
 def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
     """Creates a bibliography file.
 
@@ -207,9 +216,19 @@ def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
 
         return False, ex
 
+    if not _is_bibfile_present(os.listdir()):
+        ex = exceptions.InternalException(
+            "There is no bibliography file in the current project. "
+            "Cant create bibliography.",
+            SeverityLevels.HIGH
+        )
+
+        return False, ex
+
     # TODO: Remove quiet option if specified in config_dict
     argument_list: list[str] = ["biber", "-q", f"{file_name}"]
-    subprocess.call(argument_list)
+    # argument_list: list[str] = ["biber", "-v", f"{file_name}"]
+    return_value = subprocess.call(argument_list)
 
     return True, None
 
@@ -302,7 +321,7 @@ def _move_pdf_file(file_name) -> Monad:
     # Create Folder
     try:
         os.makedirs("DEPLOY")
-    except FileExistsError as e:
+    except FileExistsError:
         _exeption = exceptions.InternalException(
             "Folder already exists. Proceed as intended.",
             SeverityLevels.LOW
@@ -346,7 +365,7 @@ def clean_working_dir(file_name: str, config_dict: dict[str, Any]) -> Monad:
 
     _success, _exception = _move_pdf_file(file_name)
 
-    if not _success and _exception.severity_level >= 20:
+    if _exception and _exception.severity_level >= 20:
         return False, _exception
 
     for file in os.listdir():

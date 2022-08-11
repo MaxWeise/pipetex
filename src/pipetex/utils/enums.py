@@ -26,4 +26,6 @@ class ConfigDictKeys(enum.Enum):
 
     NEW_NAME = "new_name"
     FILE_PREFIX = "file_prefix"
+    VERBOSE = "verbose"
+    QUIET = "quiet"
 

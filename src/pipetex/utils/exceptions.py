@@ -65,3 +65,20 @@ class InternalException(Exception):
 
     def __repr__(self) -> str:
         return super().__repr__()
+
+    def __eq__(self, other) -> bool:
+        """Overloads the == operator"""
+        return self.severity_level == other.severity_level
+
+    def __ge__(self, other) -> bool:
+        """Overloads the >= operator"""
+        return self.severity_level >= other.severity_level
+
+    def __le__(self, other) -> bool:
+        """Overloads the <= operator."""
+        return self.severity_level <= other.severity_level
+
+    def __lt__(self, other) -> bool:
+        """Overloads the < operator."""
+        return self.severity_level < other.severity_level
+
