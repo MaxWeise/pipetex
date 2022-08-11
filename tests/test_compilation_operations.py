@@ -10,6 +10,7 @@ from src.pipetex.utils import exceptions
 
 from tests import util_functions
 
+import os
 import pytest
 
 from typing import Optional, Tuple
@@ -104,6 +105,20 @@ def test_create_bibliography_BcfFileNotFound(config_dict, mocker):
     file_name = "not_a_testfile"
 
     mocker.patch("subprocess.call", return_value=None)
+    succsess, error = operations.create_bibliograpyh(file_name, config_dict)
+
+    assert not succsess
+    assert error
+    assert 10 < error.severity_level <= 20
+    assert type(error.severity_level) == int
+
+
+def test_create_bibliography_BibFileNotFound(bibliography_testfile,
+                                             config_dict, mocker):
+    """Test the correct behaviour when no bib file was found."""
+    file_name = bibliography_testfile
+    os.remove(f"{file_name}.bib")
+
     succsess, error = operations.create_bibliograpyh(file_name, config_dict)
 
     assert not succsess
