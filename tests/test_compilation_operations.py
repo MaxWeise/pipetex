@@ -55,7 +55,10 @@ def glossary_testfile():
 
 @pytest.fixture
 def config_dict():
-    return {"file_prefix": "[piped]"}
+    return {
+        "file_prefix": "[piped]",
+        "verbose": False
+    }
 
 
 # === Type Def ===
