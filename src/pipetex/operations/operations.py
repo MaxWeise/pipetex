@@ -165,8 +165,10 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
 
         return False, ex
 
-    # TODO: Remove quiet option if specified in config_dict
     argument_list: list[str] = ["pdflatex", "-quiet", f"{file_name}.tex"]
+    if config_dict[ConfigDictKeys.VERBOSE.value]:
+        argument_list.pop(argument_list.indexof("-quiet"))
+
     subprocess.call(argument_list)
 
     return True, None
@@ -225,9 +227,11 @@ def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
 
         return False, ex
 
-    # TODO: Remove quiet option if specified in config_dict
     argument_list: list[str] = ["biber", "-q", f"{file_name}"]
-    # argument_list: list[str] = ["biber", "-v", f"{file_name}"]
+
+    if config_dict[ConfigDictKeys.VERBOSE.value]:
+        argument_list.pop(argument_list.indexof("-q"))
+
     return_value = subprocess.call(argument_list)
 
     return True, None
@@ -285,8 +289,11 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
 
         return False, ex
 
-    # TODO: Remove quiet option if specified in config_dict
     argument_list: list[str] = ["makeglossaries", "-q", f"{file_name}"]
+
+    if config_dict[ConfigDictKeys.VERBOSE.value]:
+        argument_list.pop(argument_list.indexof("-q"))
+
     subprocess.call(argument_list)
 
     return True, None
