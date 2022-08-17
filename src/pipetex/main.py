@@ -8,7 +8,8 @@ while running the pipeline.
 created: 11.08.2022
 """
 
-import pipeline
+from pipetex import pipeline
+
 
 import argparse
 # import coloredlogs
