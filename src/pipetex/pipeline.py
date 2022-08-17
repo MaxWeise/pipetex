@@ -8,9 +8,9 @@ returned form the operations.
 created: 29.07.2022
 """
 
-from pipetex.utils import enums
-from pipetex.utils import exceptions
-from pipetex.operations import operations
+from pipetex import enums
+from pipetex import exceptions
+from pipetex import operations
 
 from collections.abc import Callable
 from typing import Any, Optional, Tuple

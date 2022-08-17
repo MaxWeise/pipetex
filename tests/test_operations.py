@@ -9,8 +9,8 @@ entirely clear right now.
 created 23.07.2022
 """
 
-from src.pipetex.operations import operations
-from src.pipetex.utils import enums, exceptions
+from src.pipetex import operations
+from src.pipetex import enums, exceptions
 from tests import util_functions
 
 

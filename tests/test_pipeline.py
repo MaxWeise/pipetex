@@ -5,8 +5,8 @@ created 29.07.2022
 """
 
 from src.pipetex.pipeline import Pipeline
-from src.pipetex.utils import exceptions
-from src.pipetex.utils.enums import SeverityLevels
+from src.pipetex import exceptions
+from src.pipetex.enums import SeverityLevels
 from tests import util_functions
 
 import os

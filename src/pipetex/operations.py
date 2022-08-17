@@ -8,8 +8,8 @@ signature so the pipeline can dynamically execute them one by one.
 created: 23.07.2022
 """
 
-from pipetex.utils import exceptions
-from pipetex.utils.enums import SeverityLevels, ConfigDictKeys
+from pipetex import exceptions
+from pipetex.enums import SeverityLevels, ConfigDictKeys
 
 import os
 import re

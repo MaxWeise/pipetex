@@ -5,8 +5,8 @@ created 26.07.2022
 """
 
 
-from src.pipetex.operations import operations
-from src.pipetex.utils import exceptions
+from src.pipetex import operations
+from src.pipetex import exceptions
 
 from tests import util_functions
 

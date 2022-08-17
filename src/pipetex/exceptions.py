@@ -4,7 +4,7 @@
 created: 25.07.2022
 """
 
-from pipetex.utils.enums import SeverityLevels
+from pipetex.enums import SeverityLevels
 
 from typing import Optional
 
