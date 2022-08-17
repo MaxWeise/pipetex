@@ -440,4 +440,7 @@ TSWLatexianTemp*
 # =======================
 # === Custom settings ===
 # =======================
+.LOGS/*
+
+# Dont ignore this folder
 !./docs/PARTS
