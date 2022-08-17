@@ -11,7 +11,7 @@ created: 11.08.2022
 import pipeline
 
 import argparse
-import coloredlogs
+# import coloredlogs
 import logging
 
 
@@ -33,11 +33,11 @@ def _setup_sysarg_parser() -> argparse.Namespace:
     )
 
     # === Optional Arguments and Flags ===
-    # parser.add_argument(  # TODO: Implement later
-    #     "-v",
-    #     help="Turn on console output for the latex engines.",
-    #     action="store_true"
-    # )
+    parser.add_argument(  # TODO: Implement later
+        "-v",
+        help="Turn on console output for the latex engines.",
+        action="store_true"
+    )
 
     parser.add_argument(
         "-q",
@@ -57,8 +57,6 @@ def _setup_sysarg_parser() -> argparse.Namespace:
         action="store_true"
     )
 
-
-    # verbose, opt, bool, False | Prints output of pdflate, biber, ... to strout
     return parser.parse_args()
 
 
@@ -112,8 +110,7 @@ def main():
         cli_args.filename,
         create_bib=cli_args.bib,
         create_glo=cli_args.gls,
-        # TODO: Implement verbose option in pipeline object
-        # verbose=cli.v,
+        verbose=cli_args.v,
         quiet=cli_args.q
     )
 
