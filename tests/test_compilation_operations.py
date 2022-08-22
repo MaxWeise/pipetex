@@ -80,6 +80,21 @@ def test_compile_latex_file(simple_testfile, config_dict, mocker):
     assert not error
 
 
+def test_compile_latex_file_notVerbose(simple_testfile, config_dict, mocker):
+    """Tests the compilation of latex files. """
+    # Setup Code
+    file_name = simple_testfile
+    config_dict["verbose"] = True
+
+    # run test function
+    mocker.patch("subprocess.call", return_value=None)
+    succsess, error = operations.compile_latex_file(file_name, config_dict)
+
+    # assert statements
+    assert succsess
+    assert not error
+
+
 def test_compile_latex_file_fileNotFound(config_dict):
     """Tests that the compilation function raises an appropriate error. """
     # run test function
@@ -94,6 +109,18 @@ def test_compile_latex_file_fileNotFound(config_dict):
 def test_create_bibliography(bibliography_testfile, config_dict, mocker):
     """ Tests the creation of a bibliography. """
     file_name = bibliography_testfile
+
+    mocker.patch("subprocess.call", return_value=None)
+    succsess, error = operations.create_bibliograpyh(file_name, config_dict)
+
+    assert succsess
+    assert not error
+
+
+def test_create_bibliography_notVerbose(bibliography_testfile, config_dict, mocker):
+    """ Tests the creation of a bibliography. """
+    file_name = bibliography_testfile
+    config_dict["verbose"] = True
 
     mocker.patch("subprocess.call", return_value=None)
     succsess, error = operations.create_bibliograpyh(file_name, config_dict)
@@ -133,6 +160,18 @@ def test_create_bibliography_BibFileNotFound(bibliography_testfile,
 def test_create_glossaries(glossary_testfile, config_dict, mocker):
     """Tests the creation of glossaries. """
     file_name = glossary_testfile
+
+    mocker.patch("subprocess.call", return_value=None)
+    succsess, error = operations.create_glossary(file_name, config_dict)
+
+    assert succsess
+    assert not error
+
+
+def test_create_glossaries_notVerbose(glossary_testfile, config_dict, mocker):
+    """Tests the creation of glossaries. """
+    file_name = glossary_testfile
+    config_dict["verbose"] = True
 
     mocker.patch("subprocess.call", return_value=None)
     succsess, error = operations.create_glossary(file_name, config_dict)

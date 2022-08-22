@@ -167,7 +167,7 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
 
     argument_list: list[str] = ["pdflatex", "-quiet", f"{file_name}.tex"]
     if config_dict[ConfigDictKeys.VERBOSE.value]:
-        argument_list.pop(argument_list.indexof("-quiet"))
+        argument_list.pop(argument_list.index("-quiet"))
 
     subprocess.call(argument_list)
 
@@ -230,7 +230,7 @@ def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
     argument_list: list[str] = ["biber", "-q", f"{file_name}"]
 
     if config_dict[ConfigDictKeys.VERBOSE.value]:
-        argument_list.pop(argument_list.indexof("-q"))
+        argument_list.pop(argument_list.index("-q"))
 
     return_value = subprocess.call(argument_list)
 
@@ -292,7 +292,7 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
     argument_list: list[str] = ["makeglossaries", "-q", f"{file_name}"]
 
     if config_dict[ConfigDictKeys.VERBOSE.value]:
-        argument_list.pop(argument_list.indexof("-q"))
+        argument_list.pop(argument_list.index("-q"))
 
     subprocess.call(argument_list)
 
