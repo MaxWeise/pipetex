@@ -21,6 +21,7 @@ from typing import Any, Optional, Tuple
 # === Type Def ===
 Monad = Tuple[bool, Optional[exceptions.InternalException]]
 
+
 # === Preparation of file / working dir ===
 def copy_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
     """Create a working copy of the specified latex file.
@@ -51,8 +52,8 @@ def copy_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
 
     if f"{file_name}.tex" not in os.listdir():
         ex = exceptions.InternalException(
-                f"The file {file_name}.tex is not in the directory.",
-                SeverityLevels.CRITICAL
+            f"The file {file_name}.tex is not in the directory.",
+            SeverityLevels.CRITICAL
         )
 
         return False, ex
@@ -174,17 +175,9 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
     return True, None
 
 
-def _is_bibfile_present(list_of_current_files: list[str]) -> bool:
-    # Search bib file in root dir
+def _is_bibfile_present() -> bool:
     file_types: list[str] = []
-    for f in list_of_current_files:
-        if "." in f:
-            parts = f.split(".")
-            file_types.append(parts[-1])
-
-
-    # Search directories of the cwd recursivly
-    for root, subdirs, files in os.walk(os.getcwd()):
+    for _, _, files in os.walk(os.getcwd()):
         for f in files:
             if "." in f:
                 parts = f.split(".")
@@ -227,7 +220,7 @@ def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
 
         return False, ex
 
-    if not _is_bibfile_present(os.listdir()):
+    if not _is_bibfile_present():
         ex = exceptions.InternalException(
             "There is no bibliography file in the current project. "
             "Cant create bibliography.",
@@ -241,7 +234,7 @@ def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
     if config_dict[ConfigDictKeys.VERBOSE.value]:
         argument_list.pop(argument_list.index("-q"))
 
-    return_value = subprocess.call(argument_list)
+    subprocess.call(argument_list)
 
     return True, None
 

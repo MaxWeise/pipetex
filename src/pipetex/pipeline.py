@@ -30,12 +30,12 @@ class Pipeline:
     order_of_operations: list[OperationStep]
 
     def __init__(self,
-        file_name: str,
-        create_bib: bool = False,
-        create_glo: bool = False,
-        verbose: bool = False,
-        quiet: bool = False
-    ) -> None:
+                 file_name: str,
+                 create_bib: bool = False,
+                 create_glo: bool = False,
+                 verbose: bool = False,
+                 quiet: bool = False
+                 ) -> None:
 
         # Create sequence of operations
         self.order_of_operations = [
@@ -70,8 +70,8 @@ class Pipeline:
     ) -> exceptions.InternalException:
         """Compares two errors and returns the one with higher severity_level.
 
-        If the errors are equal in severity, the current_error will be kept, as it
-        may be the root cause for any further errors.
+        If the errors are equal in severity, the current_error will be kept, as
+        it may be the root cause for any further errors.
 
         Args:
             current_error: The error which is currently most important.
@@ -94,8 +94,14 @@ class Pipeline:
         for operation in self.order_of_operations:
             success, error = operation(local_file_name, self.config_dict)
 
-            if self.config_dict[enums.ConfigDictKeys.NEW_NAME.value]:
-                local_file_name = self.config_dict[enums.ConfigDictKeys.NEW_NAME.value]
+            try:
+                local_file_name = self.config_dict[
+                    enums.ConfigDictKeys.NEW_NAME.value
+                ]
+            except KeyError:
+                # log this exception
+               # for now, eat it
+                pass
 
             if error:
                 match error.severity_level:
@@ -107,7 +113,7 @@ class Pipeline:
                             "please see the logfiles."
                         )
                         logging.warning(
-                        f""" Operation {operation}
+                            f""" Operation {operation}
 
                              SeverityLevel: {error.severity_level}
                              Error Message: {error.message}
@@ -125,7 +131,7 @@ class Pipeline:
                             "please see the logfiles."
                         )
                         logging.debug(
-                        f""" Operation {operation}
+                            f""" Operation {operation}
 
                              SeverityLevel: {error.severity_level}
                              Error Message: {error.message}
@@ -143,7 +149,7 @@ class Pipeline:
                             "logfiles to for more information."
                         )
                         logging.critical(
-                        f""" Operation {operation}
+                            f""" Operation {operation}
 
                              SeverityLevel: {error.severity_level}
                              Error Message: {error.message}
@@ -154,7 +160,9 @@ class Pipeline:
                         return False, error
 
                     case _:
-                        logging.warning("No recognized severity level to handle")
+                        logging.warning(
+                            "No recognized severity level to handle"
+                        )
 
         # For some reason this gives an unboundError
         return rv_success, rv_error

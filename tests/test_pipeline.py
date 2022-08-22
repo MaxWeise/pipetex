@@ -5,8 +5,7 @@ created 29.07.2022
 """
 
 from src.pipetex.pipeline import Pipeline
-from src.pipetex import exceptions
-from src.pipetex.enums import SeverityLevels
+from src.pipetex.enums import ConfigDictKeys
 from tests import util_functions
 
 import os
@@ -96,7 +95,7 @@ def simple_test_environment_no_draft():
 
 @pytest.fixture
 def config_dict():
-    return {"file_prefix": "[piped]"}
+    return {"file_prefix": "[piped]", "new_name": "[piped]_test_file"}
 
 
 def test_pipeline_init():
@@ -108,7 +107,8 @@ def test_pipeline_init():
     assert underTest.order_of_operations
     assert len(underTest.order_of_operations) == 6
 
-def test_execution(simple_test_environment):
+
+def test_execution(simple_test_environment, config_dict):
     """Tests the correct execution of the pipeline."""
     file_name = simple_test_environment
 
@@ -125,7 +125,8 @@ def test_execution(simple_test_environment):
 
     files_in_dir = os.listdir("./DEPLOY")
 
-    assert f"{file_name}.pdf" in files_in_dir
+    local_file_name = config_dict[ConfigDictKeys.NEW_NAME.value]
+    assert f"{local_file_name}.pdf" in files_in_dir
 
 
 def test_execution_E_low_severityLevel(simple_test_environment_no_draft,

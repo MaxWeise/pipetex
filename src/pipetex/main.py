@@ -84,7 +84,7 @@ def _setup_logger(is_quiet: bool = False,
 
     console_handler = logging.StreamHandler()
     console_handler.setLevel(
-            logging.WARNING if is_quiet else logging.DEBUG
+        logging.WARNING if is_quiet else logging.DEBUG
     )
     console_handler.setFormatter(frmt)
 
@@ -105,7 +105,7 @@ def _setup_logger(is_quiet: bool = False,
 def main():
     """Main method of the module."""
     cli_args = _setup_sysarg_parser()
-    logger = _setup_logger()
+    # logger = _setup_logger()
 
     p = pipeline.Pipeline(
         cli_args.filename,
