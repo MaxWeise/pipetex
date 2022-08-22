@@ -89,9 +89,13 @@ class Pipeline:
     def execute(self, file_name) -> Monad:
         rv_success: bool = True
         rv_error: Optional[exceptions.InternalException] = None
+        local_file_name = file_name
 
         for operation in self.order_of_operations:
-            success, error = operation(file_name, self.config_dict)
+            success, error = operation(local_file_name, self.config_dict)
+
+            if self.config_dict[enums.ConfigDictKeys.NEW_NAME.value]:
+                local_file_name = self.config_dict[enums.ConfigDictKeys.NEW_NAME.value]
 
             if error:
                 match error.severity_level:
