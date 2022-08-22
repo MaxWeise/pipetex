@@ -76,28 +76,29 @@ def _setup_logger(is_quiet: bool = False,
         logger: Logger object which has a Console- and FileHandler
             added to it.
     """
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger("main")
     logger.setLevel(logging.DEBUG)
-    frmt = logging.Formatter(
-        '[%(name)s - %(levelname)s] - %(message)s'
-    )
 
+    # Create console handler with dynamic log level
+    stream_level = logging.WARNING if is_quiet else logging.DEBUG
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(
-        logging.WARNING if is_quiet else logging.DEBUG
-    )
-    console_handler.setFormatter(frmt)
+    console_handler.setLevel(stream_level)
 
     # TODO: Create logfiles in seperate folder
     #       Each run of the pipeline should create a seperate log file
     #       (maybe limit this number to ~10 files in the folder)
     #       Include a header for each logfile containing metadata
-    # file_handler = logging.FileHandler(log_file_path, encoding="utf-8")
-    # file_handler.setLevel(logging.DEBUG)
-    # file_handler.setFormatter(frmt)
+    #       (logfolder needs to be created seperately)
+    file_handler = logging.FileHandler(log_file_path, encoding="utf-8")
+    file_handler.setLevel(logging.DEBUG)
+
+    # Set format for the logger
+    frmt = logging.Formatter('[%(name)s - %(levelname)s] - %(message)s')
+    console_handler.setFormatter(frmt)
+    file_handler.setFormatter(frmt)
 
     logger.addHandler(console_handler)
-    # logger.addHandler(file_handler)
+    logger.addHandler(file_handler)
 
     return logger
 
@@ -105,8 +106,9 @@ def _setup_logger(is_quiet: bool = False,
 def main():
     """Main method of the module."""
     cli_args = _setup_sysarg_parser()
-    # logger = _setup_logger()
+    logger = _setup_logger()
 
+    logger.info("Initializing pipeline")
     p = pipeline.Pipeline(
         cli_args.filename,
         create_bib=cli_args.bib,
@@ -115,6 +117,7 @@ def main():
         quiet=cli_args.q
     )
 
+    logger.info("Starting pipeline")
     p.execute(p.file_name)
 
 

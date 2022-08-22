@@ -36,6 +36,8 @@ class Pipeline:
                  verbose: bool = False,
                  quiet: bool = False
                  ) -> None:
+        # Creating object logger
+        self.logger = logging.getLogger("main.pipeline")
 
         # Create sequence of operations
         self.order_of_operations = [
@@ -92,6 +94,7 @@ class Pipeline:
         local_file_name = file_name
 
         for operation in self.order_of_operations:
+            self.logger.debug(f"Now executing: {operation}")
             success, error = operation(local_file_name, self.config_dict)
 
             try:
@@ -100,19 +103,20 @@ class Pipeline:
                 ]
             except KeyError:
                 # log this exception
-               # for now, eat it
+                # for now, eat it
                 pass
 
             if error:
                 match error.severity_level:
                     case enums.SeverityLevels.LOW:
-                        logging.warning(
+                        self.logger.warning(
                             "There has been a minor issue during the "
                             f"execution of {operation} which did not affect "
                             "the flow of the pipeline. For more information "
                             "please see the logfiles."
                         )
-                        logging.warning(
+
+                        self.logger.warning(
                             f""" Operation {operation}
 
                              SeverityLevel: {error.severity_level}
@@ -123,14 +127,15 @@ class Pipeline:
                         rv_error = self._set_error(rv_error, error)
 
                     case enums.SeverityLevels.HIGH:
-                        logging.warning(
+                        self.logger.warning(
                             "There has been an issue during the "
                             f"execution of {operation} which did not affect "
                             "the flow of the pipeline but my produce an "
                             "incorrect PDF file. For more information "
                             "please see the logfiles."
                         )
-                        logging.debug(
+
+                        self.logger.debug(
                             f""" Operation {operation}
 
                              SeverityLevel: {error.severity_level}
@@ -142,13 +147,14 @@ class Pipeline:
                         rv_success = False
 
                     case enums.SeverityLevels.CRITICAL:
-                        logging.warning(
+                        self.logger.warning(
                             "There has been an issue during the "
                             f"execution of {operation} which caused the "
                             "pipeline to stop its execution. Please see the "
                             "logfiles to for more information."
                         )
-                        logging.critical(
+
+                        self.logger.critical(
                             f""" Operation {operation}
 
                              SeverityLevel: {error.severity_level}
@@ -160,10 +166,10 @@ class Pipeline:
                         return False, error
 
                     case _:
-                        logging.warning(
+                        self.logger.warning(
                             "No recognized severity level to handle"
                         )
+                        pass
 
-        # For some reason this gives an unboundError
         return rv_success, rv_error
 
