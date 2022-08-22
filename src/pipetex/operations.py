@@ -175,14 +175,23 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
 
 
 def _is_bibfile_present(list_of_current_files: list[str]) -> bool:
-    print(list_of_current_files)
+    # Search bib file in root dir
     file_types: list[str] = []
     for f in list_of_current_files:
         if "." in f:
             parts = f.split(".")
             file_types.append(parts[-1])
 
+
+    # Search directories of the cwd recursivly
+    for root, subdirs, files in os.walk(os.getcwd()):
+        for f in files:
+            if "." in f:
+                parts = f.split(".")
+                file_types.append(parts[-1])
+
     return "bib" in file_types
+
 
 def create_bibliograpyh(file_name: str, config_dict: dict[str, Any]) -> Any:
     """Creates a bibliography file.

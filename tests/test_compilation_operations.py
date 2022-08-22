@@ -12,6 +12,7 @@ from tests import util_functions
 
 import os
 import pytest
+import shutil
 
 from typing import Optional, Tuple
 
@@ -39,6 +40,28 @@ def bibliography_testfile():
     yield file_name
 
     util_functions.remove_files(file_name)
+
+
+@pytest.fixture
+def bibliography_testfile_bibInDir():
+    """A test file to test the creation of a bibliography in latex.
+
+    The bib file should be in an additional folder which is good practice in
+    most latex projects.
+    """
+    file_name = "test_file"
+    ex = ["tex", "bcf"]
+    util_functions.write_empty_file(file_name, ex)
+    bib_folder = "./bib_folder"
+    os.makedirs(bib_folder)
+
+    with open(f"{bib_folder}/{file_name}.bib", "w+", encoding="utf-8"):
+        pass
+
+    yield file_name
+
+    util_functions.remove_files(file_name)
+    shutil.rmtree(f"{bib_folder}")
 
 
 @pytest.fixture
@@ -109,6 +132,18 @@ def test_compile_latex_file_fileNotFound(config_dict):
 def test_create_bibliography(bibliography_testfile, config_dict, mocker):
     """ Tests the creation of a bibliography. """
     file_name = bibliography_testfile
+
+    mocker.patch("subprocess.call", return_value=None)
+    succsess, error = operations.create_bibliograpyh(file_name, config_dict)
+
+    assert succsess
+    assert not error
+
+
+def test_create_bibliography_bibFileInFolder(bibliography_testfile_bibInDir,
+                                             config_dict, mocker):
+    """ Tests the creation of a bibliography. """
+    file_name = bibliography_testfile_bibInDir
 
     mocker.patch("subprocess.call", return_value=None)
     succsess, error = operations.create_bibliograpyh(file_name, config_dict)
