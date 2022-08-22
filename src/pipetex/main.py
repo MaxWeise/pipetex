@@ -34,7 +34,7 @@ def _setup_sysarg_parser() -> argparse.Namespace:
     )
 
     # === Optional Arguments and Flags ===
-    parser.add_argument(  # TODO: Implement later
+    parser.add_argument(
         "-v",
         help="Turn on console output for the latex engines.",
         action="store_true"
@@ -92,12 +92,12 @@ def _setup_logger(is_quiet: bool = False,
     #       Each run of the pipeline should create a seperate log file
     #       (maybe limit this number to ~10 files in the folder)
     #       Include a header for each logfile containing metadata
-    file_handler = logging.FileHandler(log_file_path, encoding="utf-8")
-    file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(frmt)
+    # file_handler = logging.FileHandler(log_file_path, encoding="utf-8")
+    # file_handler.setLevel(logging.DEBUG)
+    # file_handler.setFormatter(frmt)
 
     logger.addHandler(console_handler)
-    logger.addHandler(file_handler)
+    # logger.addHandler(file_handler)
 
     return logger
 
