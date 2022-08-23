@@ -113,7 +113,7 @@ def main():
         create_bib=cli_args.bib,
         create_glo=cli_args.gls,
         verbose=cli_args.v,
-        quiet=cli_args.q
+        # quiet=cli_args.q
     )
 
     logger.info("Starting pipeline")
