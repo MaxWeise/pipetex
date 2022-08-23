@@ -12,7 +12,7 @@ from typing import Optional
 class InternalException(Exception):
     """Is raised when an operation needs to communicate an error.
 
-    This exception type is used when a runngin operation can't execute properly
+    This exception type is used when a runing operation can't execute properly
     due to an internal error. This can be e.g. a missing file, an unsucessfull
     call to a sys command or similar.  Every instance of this error type must
     contain a message and severity level. The message is used for logging and
@@ -56,16 +56,20 @@ class InternalException(Exception):
 
     @property
     def severity_level(self) -> int:
+        """The severity level represented by an integer value."""
         return self._severity_level.value
 
     def __str__(self) -> str:
+        """String representation of the exception type."""
         _errorType = ("InternalException" if not self.error_tpye
                       else self.error_tpye)
         return f"{_errorType} ({self.severity_level}) | {self.message}"
 
     def __repr__(self) -> str:
+        """Repr method of the class. For now just use the super method."""
         return super().__repr__()
 
+    # === Define order and comparison operations ===
     def __eq__(self, other) -> bool:
         """Overloads the == operator"""
         return bool(self.severity_level == other.severity_level)

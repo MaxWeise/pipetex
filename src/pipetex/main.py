@@ -61,10 +61,9 @@ def _setup_sysarg_parser() -> argparse.Namespace:
     return parser.parse_args()
 
 
-# TODO: Add return typehint
 def _setup_logger(is_quiet: bool = False,
-                  log_file_path: str = "log_file.txt"):
-    """Creates the logger instanc(es) for the script.
+                  log_file_path: str = "log_file.txt") -> logging.Logger:
+    """Creates the logger instance for the script.
 
     Args:
         is_quiet: When specified, the log level of the console handler will

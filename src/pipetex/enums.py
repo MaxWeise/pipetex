@@ -9,7 +9,11 @@ import enum
 
 
 class SeverityLevels(enum.IntEnum):
-    """The levels of severity wich are used for exception handling."""
+    """The levels of severity wich are used for exception handling.
+
+    Higher levels indicate a more serious error. If neede values which are not
+    a multiple of 10 can be inserted. However, the values must be integers.
+    """
 
     LOW = 10
     HIGH = 20

@@ -117,7 +117,6 @@ def remove_draft_option(file_name: str, config_dict: dict[str, Any]) -> Monad:
         ex = exceptions.InternalException(
             "Draft option is not in the class definition",
             SeverityLevels.LOW
-            # type(ValueError)
         )
 
         return False, ex
@@ -177,6 +176,11 @@ def compile_latex_file(file_name: str, config_dict: dict[str, Any]) -> Monad:
 
 
 def _is_bibfile_present() -> bool:
+    """Searches bibliography file recursively in the current working dir.
+
+    Returns:
+        bool: True, if the bibliography file is present somewhere in the
+            working dir or its subdirs."""
     file_types: list[str] = []
     for _, _, files in os.walk(os.getcwd()):
         for f in files:

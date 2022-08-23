@@ -24,6 +24,22 @@ OperationStep = Callable[[str, dict[str, Any]], Monad]
 
 
 class Pipeline:
+    """Representation of a pipeline object. Runs different tasks on the file.
+
+    The pipeline keeps a reference of which operations should be run in which
+    order. Also the pipeline will comunicate errors to the user by using
+    logging stements.
+
+    Common Usage:
+        p = Pipeline(file_name, True, False, False, False)
+        p.execute(p.file_name)
+
+    Attributes:
+        file_name: Name of the file which should be processed.
+        config_dict: Contains metadata which should be shared
+             with the operations.
+        oder_of_operations: List of operations which will be run on the file.
+    """
 
     file_name: str
     config_dict: dict[str, Any]
@@ -31,11 +47,18 @@ class Pipeline:
 
     def __init__(self,
                  file_name: str,
-                 create_bib: bool = False,
-                 create_glo: bool = False,
-                 verbose: bool = False,
-                 quiet: bool = False
+                 create_bib: Optional[bool] = False,
+                 create_glo: Optional[bool] = False,
+                 verbose: Optional[bool] = False,
                  ) -> None:
+        """Initialize a pipeline object.
+
+        Args:
+            file_name: Name of the file which will be processed.
+            create_bib: Create a bibliography. Defaults to false.
+            create_glo: Create a glossary. Defaults to false.
+            verbose: Print console output of latex engines. Defaults to false.
+        """
         # Creating object logger
         self.logger = logging.getLogger("main.pipeline")
 
@@ -59,7 +82,6 @@ class Pipeline:
         # an instance variable of pipeline
         self.config_dict = {    # type: ignore
             enums.ConfigDictKeys.VERBOSE.value: verbose,
-            enums.ConfigDictKeys.QUIET.value: quiet,
             enums.ConfigDictKeys.FILE_PREFIX.value: "[piped]"
         }
 
@@ -88,7 +110,17 @@ class Pipeline:
 
         return rv
 
+    # TODO: Refactor this method to make it physically smaller.
     def execute(self, file_name) -> Monad:
+        """Executes the operations defined by the constructor.
+
+        Args:
+            file_name: The file which is processed by the operations.
+
+        Returns:
+            Monad: Tuple which holds a value indicating the success of the
+                pipeline and an error value if success is false.
+        """
         rv_success: bool = True
         rv_error: Optional[exceptions.InternalException] = None
         local_file_name = file_name
