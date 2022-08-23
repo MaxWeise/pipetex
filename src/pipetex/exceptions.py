@@ -68,17 +68,17 @@ class InternalException(Exception):
 
     def __eq__(self, other) -> bool:
         """Overloads the == operator"""
-        return self.severity_level == other.severity_level
+        return bool(self.severity_level == other.severity_level)
 
     def __ge__(self, other) -> bool:
         """Overloads the >= operator"""
-        return self.severity_level >= other.severity_level
+        return bool(self.severity_level >= other.severity_level)
 
     def __le__(self, other) -> bool:
         """Overloads the <= operator."""
-        return self.severity_level <= other.severity_level
+        return bool(self.severity_level <= other.severity_level)
 
     def __lt__(self, other) -> bool:
         """Overloads the < operator."""
-        return self.severity_level < other.severity_level
+        return bool(self.severity_level < other.severity_level)
 
