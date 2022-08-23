@@ -15,13 +15,14 @@ from tests import util_functions
 
 
 import os
+import os.path
 import pytest
 import shutil
 from typing import Optional, Tuple
 
-
 # === Fixtures ===
 FILE_PREFIX = "[piped]"
+
 
 @pytest.fixture
 def simple_testfile():
@@ -163,12 +164,16 @@ def test_clean_working_dir(dirty_working_dir, config_dict):
 
     # write a testfile which should not be removed by the method
     not_removed = "not_removed"
-    with open(f"{not_removed}.tex", "w+") as f:
+    with open(f"{not_removed}.tex", "w+"):
         pass
 
     test_file = dirty_working_dir
 
-    success, error = operations.clean_working_dir(test_file, config_dict)
+    success, error = operations.clean_working_dir(
+        test_file,
+        config_dict,
+        new_file_name=test_file
+    )
     current_dir = os.listdir()
 
     assert success
@@ -187,9 +192,11 @@ def test_clean_working_dir_FolderAlreadyExists(dirty_working_dir, config_dict):
     test_file = dirty_working_dir
     # Create the folder as part of the env setup
     os.mkdir("DEPLOY")
+
     success, error = operations.clean_working_dir(
         dirty_working_dir,
-        config_dict
+        config_dict,
+        new_file_name=test_file
     )
     current_dir = os.listdir()
 
@@ -202,6 +209,30 @@ def test_clean_working_dir_FolderAlreadyExists(dirty_working_dir, config_dict):
         assert f"{test_file}.{ex}" not in current_dir
     assert "DEPLOY" in current_dir
     assert f"{test_file}.pdf" in os.listdir("./DEPLOY")
+
+
+def test_clean_working_dir_FileInFolderAlreadyExists(dirty_working_dir,
+                                                     config_dict):
+    """Tests that the function executes properly."""
+
+    # Create folder and file
+    os.mkdir("DEPLOY")
+    with open("DEPLOY/test_file.pdf", "w+", encoding="utf-8"):
+        pass
+
+    success, error = operations.clean_working_dir(
+        dirty_working_dir,
+        config_dict
+    )
+
+    assert not success
+    assert error
+    assert type(error.severity_level) == int
+    assert error.severity_level <= 10
+
+    files_in_deploy = os.listdir("./DEPLOY")
+    print(files_in_deploy)
+    assert len(files_in_deploy) == 2
 
 
 def test_clean_working_dir_PdfFileNotFound(dirty_working_dir, config_dict):
