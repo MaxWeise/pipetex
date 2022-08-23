@@ -11,6 +11,7 @@ created: 23.07.2022
 from pipetex import exceptions
 from pipetex.enums import SeverityLevels, ConfigDictKeys
 
+import datetime
 import os
 import re
 import shutil
@@ -302,7 +303,7 @@ def create_glossary(file_name: str, config_dict: dict[str, Any]) -> Any:
 
 
 # === tear down / clean up processes ===
-def _move_pdf_file(file_name) -> Monad:
+def _move_pdf_file(file_name, new_file_name: Optional[str] = None) -> Monad:
     """Moves pdf file to seperate folder.
 
     To avoid that the created pdf file is deleted by the clean up process, this
@@ -327,6 +328,11 @@ def _move_pdf_file(file_name) -> Monad:
     _exeption = None
     _successvalue = True
 
+    if not new_file_name:
+        cur_date = datetime.datetime.now()
+        formatted_date = cur_date.strftime("%Y_%m_%d_%H_%M")
+        new_file_name = f"{formatted_date}_{file_name}"
+
     # Create Folder
     try:
         os.makedirs("DEPLOY")
@@ -340,6 +346,9 @@ def _move_pdf_file(file_name) -> Monad:
 
     try:
         shutil.move(f"{file_name}.pdf", "./DEPLOY")
+        old_name = os.path.join(".", "DEPLOY", f"{file_name}.pdf")
+        new_name = os.path.join(".", "DEPLOY", f"{new_file_name}.pdf")
+        os.rename(old_name, new_name)
     except FileNotFoundError:
         _exeption = exceptions.InternalException(
             "The pdf document could not be found. Perhaps it was not created?",
@@ -351,7 +360,8 @@ def _move_pdf_file(file_name) -> Monad:
     return _successvalue, _exeption
 
 
-def clean_working_dir(file_name: str, config_dict: dict[str, Any]) -> Monad:
+def clean_working_dir(file_name: str, config_dict: dict[str, Any],
+                      new_file_name: Optional[str] = None) -> Monad:
     """Cleans the working directory from any generated files.
 
     Removes unwanted / redundant auxiliary files. Moves the created PDF
@@ -372,7 +382,7 @@ def clean_working_dir(file_name: str, config_dict: dict[str, Any]) -> Monad:
     _success: bool = True
     _exception: Optional[exceptions.InternalException] = None
 
-    _success, _exception = _move_pdf_file(file_name)
+    _success, _exception = _move_pdf_file(file_name, new_file_name)
 
     if _exception and _exception.severity_level >= 20:
         return False, _exception
