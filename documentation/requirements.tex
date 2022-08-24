@@ -1,0 +1,43 @@
+\documentclass[a4paper, draft, 12pt]{scrartcl}
+
+\usepackage{STYLE/packages}
+\usepackage{STYLE/settings}
+\usepackage{STYLE/formales_deckblatt}
+
+% Glossary entries
+\usepackage{GLOSSARY/glossary}
+
+\title{Project Specifications}
+\author{Max Weise}
+
+\makeglossaries
+\pagestyle{fancy}
+
+\begin{document}
+% \maketitle
+\titelseite
+{}
+{}
+{- Pipetex -}
+{Requirements and Specification}
+{Max Weise \\ Contact Email: \url{maxfencing@web.de}}
+{}
+\tableofcontents\newpage
+
+\input{PARTS/introduction}
+\input{PARTS/requirements_and_usecases}
+
+\newpage\appendix
+
+\printglossary
+\listoftables
+
+% \begingroup
+% \let\clearpage\relax
+% \printglossary
+% \listoffigures
+% \listoftables
+% \endgroup
+
+\end{document}
+
