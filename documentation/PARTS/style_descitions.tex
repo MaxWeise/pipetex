@@ -1,9 +1,9 @@
 \section{Styleguide}
 
 \subsection{General Guides}
-As I'm sure the list following in section~\ref{sub:descitions} will be
+As I'm sure the list following in section~\ref{sub:decisions} will be
 incomplete for some time to come, as some situations won't occur or are not
-forseen at the time of writing. As it would be too much effort to adress every
+foreseen at the time of writing. As it would be too much effort to address every
 edge case I present the following compromise:
 
 Most situations handling codestyle problems are handled in
@@ -13,7 +13,7 @@ there, please refer to the Google Python Style Guide.
 In the rare case that something is not handled \emph{there}, please refer to the
 official PEP8 Style Guide written by Guido van Rossum.
 Please note, that neither the style guide provided by Google, not the PEP8 Guide
-overrule the descitions made in this style guide.
+overrule the decisions made in this style guide.
 
 \subsection{Tools}
 Following will list the tools used to help in keeping the code clean
@@ -22,16 +22,100 @@ and uniform:
 \subsubsection{Linter}
 Currently, the \textbf{flake8} linter is used. The repository also provides a
 flake8rc which configures the linter according to the requirements. To run the
-linter, simply run it on the source directoy using \cli{flake8 src/}. I also
-recomend integrating it into your texteditor or IDE to run it automatically
+linter, simply run it on the source directory using \cli{flake8 src/}. I also
+recommend integrating it into your text editor or IDE to run it automatically
 on the edited file or on the press of a button. 
 
+\subsubsection{Typechecking}
 As typehints are greatly encouraged in the project, I recomend to
 use \textbf{mypy} when modifying the code. In this case, no configuration is
-needed and you can simply run \cli{mypy src/} on the source directoy to check
-for any type incompatabilities. This can also be integrated into your
-texteditor or IDE.
+needed and you can simply run \cli{mypy src/} on the source directory to check
+for any type incompatibilities. This can also be integrated into your
+text editor or IDE.
 
-\subsection{Style Descitions}\label{sub:descitions}
-<++>
+\subsection{Style Decisions}\label{sub:descitions}
+Now, on to how the code actually should look.
+
+\subsubsection{Project Layout}
+The rogh layout of the project looks like this: 
+
+\begin{figure}[!ht]
+    % \centering
+    \dirtree{%
+    .1 /.
+        .2 docs.
+        .2 src.
+            .3 pipetex.
+                .4 \_\_init\_\_.py.
+                .4 main.py.
+                .4 pipeline.py.
+                .4 various\_utils.py\DTcomment{This is just an example module}.
+        .2 tests.
+    }
+    \caption{Directory Structure}
+\end{figure}
+
+Ideally, only new modules have to be introduced to the codebase and no new
+packages.
+
+\newpage
+
+\subsubsection{Modules}
+Modules should be named with descriptive, snake\_case names. In the best case
+scenario, one word modules should be enough, but multiple words are possible as
+a module name.
+
+Every module should start with a docstring which is used to generate
+documentation.  The docstrings should include \emph{what} belongs inside the
+module, why is it needed and (if possible) a common use case description.
+Please also include the name of the author and the date of creation. For more
+information on how to write docstrings (not only for modules) please refer to
+section~\ref{ssub:docstrings}. A module docstring may look something like this:
+
+
+\lstinputlisting[
+    language=Python,
+    caption={Example Module Docstring},
+    firstline=1,
+    lastline=12,
+    columns=flexible,
+]
+{../src/pipetex/operations.py}
+
+
+Modules may contain multiple classes, especially if they are small in lines
+of code and have some semantic or logical connection to each other (e.g:
+enumerations can be located in the same module). As classes are getting bigger
+or need to be more isolated for testing purposes they should be moved to a
+separate file.
+
+\subsubsection{Classes}
+Classes are a great feature for combining data and behavior, implementing
+design patterns and encapsulating similar things together. Python offers the
+typical behavior of a object oriented programming language and it is usually a
+good idea to harvest the benefits of this. But luckily, we are not using Java
+(no offense) and are not \emph{forced} to rely on classes. So before
+implementing, take a moment to reflect on the planned implementation and
+determine if a class is the best option for the task or if it can be realized
+by for example a simple function.
+
+I usually use 3 questions when determining if I need a class or not.
+
+\begin{itemize}
+   \item Do I need to store data in the class? 
+   \item Do I need to reuse the class?
+   \item Do I need the class for a type definition or inheritance hierarchy?
+\end{itemize}
+
+If you answer 'yes' to at least two of these questions then its probably best
+to use a class. Otherwise consider using functions, especially if you don't
+need to store data in an object.
+
+Classes should be named in the PascalCase style, numbers and symbols like underscores
+or dashes are discouraged. Each class must contain a docstring below the class
+definition describing the class and listing any public attributes.
+
+
+\subsubsection{Docstrings}\label{ssub:docstrings}
+
 
