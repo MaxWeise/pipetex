@@ -1,0 +1,119 @@
+\section{Requirements Engineering}
+The following will contain a list of concrete requirements for the project.
+The list is not final for the moment as future updates and development
+processes may impact the requirements of the project.
+
+The section \ref{sec:use cases} will contain a list of use cases which are the
+base for all requirements. The requirements themselves will be listed in
+section \ref{sec:func_requirements}.
+
+\subsection{Use Cases}\label{sec:use cases}
+The following contains a list of use cases for the system. 
+
+All use cases result in the construction of a PDF-Document which contains full
+images and is free from length marks.
+
+\subsubsection*{Removing the draft-option}
+The user calls the pipetex-application by entering the CLI-command for the
+application and supplying the name of the main {\LaTeX} file.  This is done in
+the directory containing the {\LaTeX} file.
+
+The application will make a copy or the file, remove draft option from the
+class definition and compile the {\LaTeX} file two times. The compiled pdf file
+will be moved to a separate directory and all generated auxiliary files will be
+removed from the directory.
+
+\subsubsection*{Creating a bibliography}
+The user calls the pipetex-application by entering the CLI-command for the
+application and supplying the name of the main {\LaTeX} file and a flag which
+specifies the creation of a bibliography file.  This is done in the directory
+containing the {\LaTeX} file.
+
+The application will make a copy or the file, remove draft option from the
+class definition and compile the {\LaTeX} file. The application will call a
+\gls{bib_engine} on the {\LaTeX} file and then compile the file again. The
+compiled pdf file will be moved to a separate directory and all generated
+auxiliary files will be removed from the directory.
+
+\subsubsection*{Creating a glossary}
+The user calls the pipetex-application by entering the CLI-command for the
+application and supplying the name of the main {\LaTeX} file and a flag which
+specifies the creation of a glossary file.  This is done in the directory
+containing the {\LaTeX} file.
+
+The application will make a copy or the file, remove draft option from the
+class definition and compile the {\LaTeX} file. The application will call a
+\gls{glo_engine} on the {\LaTeX} file and then compile the file again. The
+compiled pdf file will be moved to a separate directory and all generated
+auxiliary files will be removed from the directory.
+
+\subsection{Functional Requirements}\label{sec:func_requirements}
+Now following is a compilation of all requirements for the application.  The
+requirements will be grouped into three categories.  The categories are ordered
+by importance:
+
+\begin{itemize}
+    \item \Gls{must_have_req}
+    \item \Gls{should_have_req}
+    \item \Gls{nice_to_have_req}
+\end{itemize}
+
+The requirements have an ID, a name and a short description.
+
+\newpage
+\subsubsection{Must Have Requirements}\label{sec:must_have_requirements}
+The following contains all \Gls{must_have_req}. 
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{ | p{0.15\textwidth} | p{0.3\textwidth} | p{0.45\textwidth} | }
+        \hline
+        \textbf{ID} & \textbf{Name} & \textbf{Description} \\
+        \hline
+        MHR1 & {\LaTeX}-Compilation & The application must be able to compile {\LaTeX} Documents using a {\TeX}-Engine. \\ \hline
+        MHR2 & Draft-Mode-Removal & The application must be able to find and remove the draft option in the class definition \\ \hline
+        MHR3 & Creation of bibliography &  The application must be able to run a script to create a bibliography on the document \\ \hline
+        MHR4 & Creation of glossary & The application must be able to run a script to create a glossary on the document \\ \hline
+        MHR5 & Working-dir-agnosticism & The script must be callable from everywhere in the file system without the need of a copy in any specific location \\ \hline
+        MHR7 & CLI-Compatibility & The application must be callable from a CLI \\ \hline
+        MHR8 & Lossless-Execution & The application must not make changes to the main {\TeX} file. Instead, it should operate on a copy of the file to ensure nothing is lost. \\ \hline
+        MHR9 & Working-Dir-Cleanup& The application should remove all generated auxiliary files once the compilation process is over. \\ \hline
+    \end{tabular}
+    \caption{Functional Must Have Requirements}
+\end{table}
+
+\newpage
+\subsubsection{Should Have Requirements}\label{sec:should_have_requirements}
+The following contains all \Gls{should_have_req}. 
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{ | p{0.15\textwidth} | p{0.3\textwidth} | p{0.45\textwidth} | }
+        \hline
+        \textbf{ID} & \textbf{Name} & \textbf{Description} \\
+        \hline
+        SHR1 & Meaningful-Exit-on-Error & The application should only quit if the {\LaTeX}-compilation fails. All other engines should log the error and continue with the execution \\ \hline
+        SHR2 & Logging & The application should output log messages to the CLI. \\ \hline
+        SHR3 & Changing-Output-Name & The application should provide the option to rename the PDF document which will be generated. \\ \hline
+    \end{tabular}
+    \caption{Functional Should Have Requirements}
+\end{table}
+
+\subsubsection{Nice To Have Requirements}\label{sec:nice_to_have_requirements}
+The following contains all \Gls{nice_to_have_req}. 
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{ | p{0.15\textwidth} | p{0.3\textwidth} | p{0.45\textwidth} | }
+        \hline
+        \textbf{ID} & \textbf{Name} & \textbf{Description} \\
+        \hline
+        NtHR1 & Colored-Logs & The logs printed to the CLI should be colored. \\ \hline
+        NtHR2 & Log-File & The application should provide the option to redirect the logs to a logfile. \\ \hline
+        NtHR3 & Verbose-Mode & The application should provide the option to print the output of the {\TeX} / Bib / Gloss engine to the CLI. \\ \hline
+        NtHR4 & Changing-Logging-Level & The application should provide an option to increase or decrease the logging level. \\ \hline
+        NtHR5 & Changing-Engine & The application should provide a way to change specific compilation engines if the user is not satisfied with the standard. \\ \hline
+    \end{tabular}
+    \caption{Functional Nice to Have Requirements}
+\end{table}
+

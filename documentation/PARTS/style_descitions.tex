@@ -1,0 +1,37 @@
+\section{Styleguide}
+
+\subsection{General Guides}
+As I'm sure the list following in section~\ref{sub:descitions} will be
+incomplete for some time to come, as some situations won't occur or are not
+forseen at the time of writing. As it would be too much effort to adress every
+edge case I present the following compromise:
+
+Most situations handling codestyle problems are handled in
+section~\ref{sub:descitions}. If for some reason a situation is not handled
+there, please refer to the Google Python Style Guide. 
+% \url{https://google.github.io/styleguide/pyguide.html}
+In the rare case that something is not handled \emph{there}, please refer to the
+official PEP8 Style Guide written by Guido van Rossum.
+Please note, that neither the style guide provided by Google, not the PEP8 Guide
+overrule the descitions made in this style guide.
+
+\subsection{Tools}
+Following will list the tools used to help in keeping the code clean
+and uniform:
+
+\subsubsection{Linter}
+Currently, the \textbf{flake8} linter is used. The repository also provides a
+flake8rc which configures the linter according to the requirements. To run the
+linter, simply run it on the source directoy using \cli{flake8 src/}. I also
+recomend integrating it into your texteditor or IDE to run it automatically
+on the edited file or on the press of a button. 
+
+As typehints are greatly encouraged in the project, I recomend to
+use \textbf{mypy} when modifying the code. In this case, no configuration is
+needed and you can simply run \cli{mypy src/} on the source directoy to check
+for any type incompatabilities. This can also be integrated into your
+texteditor or IDE.
+
+\subsection{Style Descitions}\label{sub:descitions}
+<++>
+
