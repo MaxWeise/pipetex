@@ -1,16 +1,62 @@
-% \documentclass[a4paper, draft, 12pt]{scrartcl}
-\documentclass[a4paper, 12pt]{scrartcl}
+\documentclass[a4paper, draft, 12pt]{scrartcl}
 
 \usepackage{STYLE/formales_deckblatt}
 \usepackage{STYLE/packages}
 \usepackage{STYLE/settings}
 
 \usepackage{dirtree}
-\usepackage{listings}
+\usepackage[final]{listings}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+
+% Python style for highlighting
+\newcommand{\pythonstyle}
+{
+    \lstset{
+        language=Python,
+        basicstyle=\ttm,
+        morekeywords={self},              % Add keywords here
+        keywordstyle=\ttb\color{deepblue},
+        emph={MyClass,__init__},          % Custom highlighting
+        emphstyle=\ttb\color{deepred},    % Custom highlighting style
+        stringstyle=\color{deepgreen},
+        frame=tb,                         % Any extra options here
+        showstringspaces=false
+    }
+}
+
+\newcommand{\codeexample}[4]
+% #1: Caption
+% #2: First Line
+% #3: Last Line
+% #4: Python File
+{
+    \small
+    \pythonstyle
+    \lstinputlisting[
+        caption={#1},
+        firstline=#2,
+        lastline=#3,
+        columns=flexible,
+        breaklines=true,
+    ]
+    {#4}
+    \normalsize
+}
 
 \newcommand{\cli}[1]    % Use this when terminal commands are displayed
 { \texttt{\$~#1} }
 
+\pagestyle{fancy}
 \begin{document}
 \titelseite
 {}
@@ -20,6 +66,7 @@
 {Max Weise \\ Contact Email: \url{maxfencing@web.de}}
 {}
 \tableofcontents
+\lstlistoflistings
 
 \input{PARTS/style_intro}
 \input{PARTS/style_descitions}
