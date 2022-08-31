@@ -8,12 +8,11 @@ every edge case I present the following compromise:
 
 Most situations handling codestyle problems are handled in
 section~\ref{sub:descitions}. If for some reason a situation is not handled
-there, please refer to the Google Python Style Guide. 
-% \url{https://google.github.io/styleguide/pyguide.html}
-In the rare case that something is not handled \emph{there}, please refer to
-the official PEP8 Style Guide written by Guido van Rossum.  Please note, that
-neither the style guide provided by Google, not the PEP8 Guide overrule the
-decisions made in this style guide.
+there, please refer to the \RefGoogleStyle{}.  In the rare case that something
+is not handled \emph{there}, please refer to the official PEP8 Style Guide
+written by Guido van Rossum.  Please note, that neither the style guide
+provided by Google, not the PEP8 Guide overrule the decisions made in this
+style guide.
 
 \subsection{Tools}
 Following will list the tools used to help in keeping the code clean
@@ -32,6 +31,8 @@ use \textbf{mypy} when modifying the code. In this case, no configuration is
 needed and you can simply run \cli{mypy src/} on the source directory to check
 for any type incompatibilities. This can also be integrated into your
 text editor or IDE.
+
+\newpage
 
 \subsection{Style Decisions}\label{sub:descitions}
 Now, on to how the code actually should look.
@@ -60,9 +61,89 @@ packages.
 
 \newpage
 
+\subsubsection{Language and Style Rules}
+This section defines general rules to follow when contributing code to the
+project.
+
+\paragraph{Imports} Imports are only used for packages and modules. This is to
+avoid conflicting names inside the project and to keep track of the origin of
+functions and classes used in the code. Allways import the full package name
+and refrain from using relative imports.
+
+Some additional aspects to consider:
+
+\begin{itemize}
+    \item Use \texttt{from x import y} for classes and functions inside the
+        package where \texttt{x} is the module and \texttt{y} is the class or
+        function. Do not import methods from classes!
+    \item Use \texttt{from x import y as z} if the imported name is
+        inconveniently long or the.  abbreviation (\texttt{z}) is commonly used
+        (e.g.: \texttt{import numpy as np}).
+    \item Members of the \texttt{typing} package do not need to used and
+        inported with the full \texttt{package.module.class} syntax, as this
+        would clutter the code more than it would help the readability.
+\end{itemize}
+
+Import statements are allways located at the top of the file after the module
+docstring. Imports get sorted after the following scheme:
+
+\begin{enumerate}
+    \item Modules which are defined in the project. 
+    \item Imports of the form \texttt{from x import y} which match the criteria
+        listed above \\  (mostly imports from typing or collections.abc)
+    \item Other modules and librarys used in the project. These get sorted
+        alphabetically.
+\end{enumerate}
+
+\paragraph{Line Length} The maximum line length allowed is 80 characters. If
+needed, make use of implicit linejoining. The only exception for the 80
+character limit is a long url which is placed inside a comment. If the linter
+flags this, add an igore comment.
+
+\paragraph{Indentaion} Use 4 spaces to indent your code. Never use tabs or
+mix tabs with spaces. Either align wrapped elements vertically or use a hanging
+indent of 4 spaces. In case of long method signatures use the vertical align
+method. When it would be necessary to align three or more lines vertically
+make each parameter of the function a seperate line and use a hanging indent.
+
+Example:
+
+\pythonstyle
+\begin{lstlisting}[caption={Indentaion Example}]
+# Good Example
+def long_function_name(param1, param2,
+                       param2, flag=False) -> bool:
+
+def _long_method_name(
+    self,
+    param1,
+    param2,
+    param3
+) -> str
+
+
+# Bad Example
+def long_function_name(param1, param2,
+                       param2,
+                       flag=False) -> bool:
+\end{lstlisting}
+
+\paragraph{Blank Lines and Whitespace} Top level module members
+(Classes, functions) are separated by 2 blank lines. Methods inside classes are
+separated by 1 blank line. Keep the usage of blank line consistent with the
+rest of the code. The linters usually flag the incorrect usage of blank lines.
+
+Follow standart typographic rules when using whitespace. When using arithmetic
+operations or comparisions, use whitespace: \verb|if x == 5: print(x ** 2)|. 
+Please refer to the \RefGoogleStyle{} for using whitespace, as this
+is a complete summary of the rules used in this project.
+
+
 \subsubsection{Naming}
 Naming conventions are described in this section. Following, functions and
 methods are referred to as functions. 
+
+\newpage
 
 \paragraph{Modules} \textbf{\textit{module\_name.py}} \\
 Module names follow the snake\_case convention. Uppercase letters, numbers and
