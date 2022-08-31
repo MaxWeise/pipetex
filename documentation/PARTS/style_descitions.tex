@@ -3,17 +3,17 @@
 \subsection{General Guides}
 As I'm sure the list following in section~\ref{sub:decisions} will be
 incomplete for some time to come, as some situations won't occur or are not
-foreseen at the time of writing. As it would be too much effort to address every
-edge case I present the following compromise:
+foreseen at the time of writing. As it would be too much effort to address
+every edge case I present the following compromise:
 
 Most situations handling codestyle problems are handled in
 section~\ref{sub:descitions}. If for some reason a situation is not handled
 there, please refer to the Google Python Style Guide. 
 % \url{https://google.github.io/styleguide/pyguide.html}
-In the rare case that something is not handled \emph{there}, please refer to the
-official PEP8 Style Guide written by Guido van Rossum.
-Please note, that neither the style guide provided by Google, not the PEP8 Guide
-overrule the decisions made in this style guide.
+In the rare case that something is not handled \emph{there}, please refer to
+the official PEP8 Style Guide written by Guido van Rossum.  Please note, that
+neither the style guide provided by Google, not the PEP8 Guide overrule the
+decisions made in this style guide.
 
 \subsection{Tools}
 Following will list the tools used to help in keeping the code clean
@@ -84,12 +84,12 @@ notation, as members with a leading underscore won't be shown in the code
 completion preview}.
 
 Unittests should follow the function naming convention. Each test should start
-with {\glqq test\_\grqq}\footnote{I remember some frameworks force this convention, 
-some do not. As it is technically possible to use different frameworks in the same
-project I decided to enforce this naming style.} followed by the name of the
-function that is tested. If an error condition is tested, a short string in
-camelCase describing the error should follow the function name. See an example
-below:
+with {\glqq test\_\grqq}\footnote{I remember some frameworks force this
+convention, some do not. As it is technically possible to use different
+frameworks in the same project I decided to enforce this naming style.}
+followed by the name of the function that is tested. If an error condition is
+tested, a short string in camelCase describing the error should follow the
+function name. See an example below:
 
 \codeexample
 {Example Test Function}
@@ -118,18 +118,18 @@ slurs, political statements / abbreviations or any other offensive language.
 \subsubsection{Docstrings}\label{ssub:docstrings}
 Docstrings should be added at the top of modules, after the class name and
 after a function declaration. In general, all docstrngs follow the same scheme.
-Use three double quotes (" $\mapsto$ """) to start and end a docstring. 
-The first line of every docstring should contain a brief summary of the module /
+Use three double quotes (" $\mapsto$ """) to start and end a docstring.  The
+first line of every docstring should contain a brief summary of the module /
 class / function it documents followed by a blank line. If the author wants to
-write more (which is encouraged) this can be done after the blank line.
-The docstring should not exceed the 80 character line.
+write more (which is encouraged) this can be done after the blank line.  The
+docstring should not exceed the 80 character line.
 
-This is the basic way to write a docstring. What follows next depends on what the
-docstring documents.
+This is the basic way to write a docstring. What follows next depends on what
+the docstring documents.
 
 \paragraph{Module Docstrings} Module docstrings contain the author and date of
-creation of the module. The contents of the docstring should describe what belongs
-into the module and how to use it.
+creation of the module. The contents of the docstring should describe what
+belongs into the module and how to use it.
 
 Example docstring:
 
@@ -171,7 +171,7 @@ variable name to list it. Else, use its type. If the function does not return
 anything, this field is omitted.
 
 \subparagraph{Raises:} A short description of which type of error the function
-raises and when. If the error is a \verb|InternalException|, document which 
+raises and when. If the error is a \verb|InternalException|, document which
 \verb|severity_level| is / are used. If no exceptions are raised, this field is
 omitted.
 
