@@ -100,6 +100,8 @@ needed, make use of implicit linejoining. The only exception for the 80
 character limit is a long url which is placed inside a comment. If the linter
 flags this, add an igore comment.
 
+\newpage
+
 \paragraph{Indentaion} Use 4 spaces to indent your code. Never use tabs or
 mix tabs with spaces. Either align wrapped elements vertically or use a hanging
 indent of 4 spaces. In case of long method signatures use the vertical align
@@ -143,7 +145,7 @@ is a complete summary of the rules used in this project.
 Naming conventions are described in this section. Following, functions and
 methods are referred to as functions. 
 
-\newpage
+% \newpage
 
 \paragraph{Modules} \textbf{\textit{module\_name.py}} \\
 Module names follow the snake\_case convention. Uppercase letters, numbers and
@@ -234,6 +236,8 @@ Example docstring
 {42}
 {../src/pipetex/pipeline.py}
 
+\newpage
+
 \paragraph{Function Docstrings}\footnote{This also applies to methods. Function
 and method are used interchangeably.} Function docstrings should describe all
 side effects that can occur during the execution (logging is not considered a
@@ -250,6 +254,8 @@ function.  In most cases, this is the same for all functions, as monadic error
 handling is used in the project. If the return value is a variable, use the
 variable name to list it. Else, use its type. If the function does not return
 anything, this field is omitted.
+
+\newpage
 
 \subparagraph{Raises:} A short description of which type of error the function
 raises and when. If the error is a \verb|InternalException|, document which
