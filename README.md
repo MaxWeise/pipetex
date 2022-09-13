@@ -30,7 +30,7 @@ Some additional features:
 # Documentation
 To get a full overview of the classes and functions used in the project, please
 reffer to the [official
-documentation](https://maxweise.github.io/pipetex/operations.html) of this
+documentation](https://maxweise.github.io/index.html) of this
 project.
 
 This repo also contains a basic set of requirements and a styleguide to which
